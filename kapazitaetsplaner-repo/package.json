@@ -1,0 +1,12 @@
+{
+  "name": "procilon-kapazitaetsplaner",
+  "version": "0.3.1",
+  "description": "Sprint-Kapazitätsplaner für Entwicklungsteams (Dev + QA in einer Sicht).",
+  "private": true,
+  "scripts": {
+    "test": "node qa_test.js && node qa_ui_test.js && node qa_lifecycle_test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}

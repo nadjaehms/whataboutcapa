@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>procilon · Kapazitätsplaner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+<style>
+:root {
+  --p-blue-900: #001965; --p-blue-800: #002698; --p-blue-700: #0044cc;
+  --p-blue-600: #0055ff; --p-blue-500: #3287ff; --p-blue-400: #66b2ff;
+  --p-blue-300: #99d4ff; --p-blue-200: #bfeaff; --p-blue-100: #d9f2ff;
+  --p-red: #ff5444; --p-azur: #00ccbb; --p-limette: #afd907; --p-violett: #be7dff;
+  --gray-900: #1e2237; --gray-800: #5b6375; --gray-600: #999fa8;
+  --gray-300: #cad6de; --gray-100: #e6eef2; --offwhite: #e6eef2; --white: #ffffff;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
+  --shadow-sm: 0 1px 2px rgba(0,25,101,0.04), 0 2px 6px rgba(0,25,101,0.04);
+  --shadow-md: 0 4px 12px rgba(0,25,101,0.06), 0 12px 28px rgba(0,25,101,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,25,101,0.08), 0 24px 48px rgba(0,25,101,0.10);
+  --font-sans: 'Segoe UI','Inter',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  --font-display: 'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans); font-size: 15px;
+  color: var(--gray-900); background: var(--offwhite);
+  line-height: 1.55; min-height: 100vh;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-header {
+  background: linear-gradient(135deg, var(--p-blue-900) 0%, var(--p-blue-800) 50%, var(--p-blue-700) 100%);
+  color: var(--white); padding: 28px 40px 36px; position: relative; overflow: hidden;
+}
+.app-header::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 20%, rgba(255,255,255,0.06) 0, rgba(255,255,255,0) 28%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0, rgba(255,255,255,0) 30%);
+  pointer-events: none;
+}
+.brand-row { display: flex; justify-content: space-between; align-items: center; gap: 24px; position: relative; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-logo {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--p-blue-500), var(--p-blue-300));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 18px; color: var(--p-blue-900);
+  box-shadow: var(--shadow-md);
+}
+.brand-name { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.brand-name .dot { color: var(--p-azur); }
+.brand-sub { font-size: 12px; color: var(--p-blue-200); }
+.header-meta { text-align: right; font-size: 13px; color: var(--p-blue-200); }
+.header-meta .date { font-weight: 500; color: var(--white); }
+.title-block { margin-top: 22px; position: relative; }
+.title-block h1 {
+  margin: 0; font-family: var(--font-display);
+  font-size: 32px; font-weight: 700; letter-spacing: -0.02em;
+}
+.title-block .lead { margin: 8px 0 0; color: var(--p-blue-200); font-size: 14px; max-width: 820px; line-height: 1.6; }
+.view-toggle {
+  display: inline-flex; gap: 4px; padding: 4px;
+  background: rgba(255,255,255,0.1); border-radius: var(--radius-md);
+  margin-top: 22px; backdrop-filter: blur(8px); position: relative;
+}
+.view-toggle button {
+  background: transparent; border: 0; cursor: pointer;
+  padding: 9px 18px; border-radius: 10px;
+  color: var(--p-blue-100); font: inherit; font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.18s ease;
+}
+.view-toggle button .material-symbols-outlined { font-size: 18px; }
+.view-toggle button:hover { color: var(--white); }
+.view-toggle button.active {
+  background: var(--white); color: var(--p-blue-900); font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+main { flex: 1; padding: 32px 40px 56px; max-width: 1400px; margin: 0 auto; width: 100%; }
+.view { display: none; }
+.view.active { display: block; }
+.card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 24px 28px; box-shadow: var(--shadow-sm); margin-bottom: 20px;
+}
+.card h2 {
+  margin: 0 0 16px;
+  font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--gray-800); font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.card h2 .material-symbols-outlined { font-size: 20px; color: var(--p-blue-700); }
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.toolbar h2 { margin: 0; }
+.actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row { display: flex; gap: 14px; flex-wrap: wrap; }
+.field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+.field-grow { flex: 2; }
+.field-fixed { flex: 0 0 auto; min-width: auto; align-self: end; }
+.field label { font-size: 12px; font-weight: 500; color: var(--gray-800); }
+.field .hint { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+input[type="text"], input[type="number"], select {
+  font: inherit; font-size: 14px;
+  padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--gray-900); transition: all 0.15s ease;
+}
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+  outline: none; border-color: var(--p-blue-500);
+  box-shadow: 0 0 0 3px rgba(50,135,255,0.15);
+}
+input[type="number"].compact { padding: 6px 10px; max-width: 90px; text-align: right; }
+.btn {
+  font: inherit; font-size: 14px; font-weight: 600;
+  padding: 10px 18px; border-radius: var(--radius-sm); border: 0;
+  cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn .material-symbols-outlined { font-size: 18px; }
+.btn-primary { background: var(--p-blue-700); color: var(--white); }
+.btn-primary:hover { background: var(--p-blue-800); }
+.btn-secondary { background: var(--gray-100); color: var(--gray-900); }
+.btn-secondary:hover { background: var(--gray-300); }
+.btn-danger { background: var(--p-red); color: var(--white); }
+.btn-danger:hover { filter: brightness(0.95); }
+.btn-ghost { background: transparent; color: var(--p-blue-700); padding: 6px 10px; }
+.btn-ghost:hover { background: var(--p-blue-100); }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+table th, table td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--gray-100); }
+table th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-800); font-weight: 600; }
+table td.num, table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table tfoot td { font-weight: 700; border-top: 2px solid var(--gray-300); border-bottom: 0; padding-top: 14px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+}
+.chip-dev { background: rgba(0,68,204,0.08); color: var(--p-blue-700); }
+.chip-qa  { background: rgba(0,204,187,0.12); color: #00857a; }
+
+/* Hauptauslastung */
+.usage-main {
+  background: linear-gradient(135deg, var(--white), #fafcff);
+  border-radius: var(--radius-lg); padding: 28px 32px;
+  box-shadow: var(--shadow-md); margin-bottom: 16px;
+  border: 1px solid var(--gray-100);
+}
+.usage-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px; margin-bottom: 14px;
+}
+.usage-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gray-800); font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+.usage-label .material-symbols-outlined { font-size: 18px; color: var(--p-blue-700); }
+.usage-pct {
+  font-size: 44px; font-weight: 800; letter-spacing: -0.03em; color: var(--gray-900);
+  line-height: 1;
+}
+.usage-summary { font-size: 14px; color: var(--gray-800); margin-bottom: 14px; }
+.usage-summary strong { color: var(--gray-900); }
+.bar { height: 16px; background: var(--gray-100); border-radius: 8px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--p-blue-500), var(--p-blue-700));
+  transition: width 0.4s ease;
+}
+.bar-fill.over { background: linear-gradient(90deg, #ff7f6e, var(--p-red)) !important; }
+.usage-status {
+  margin-top: 10px; font-size: 13px; color: var(--gray-800);
+  display: flex; justify-content: space-between;
+}
+
+/* Sub-Info pro Rolle */
+.role-info {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+}
+.role-card {
+  background: var(--white); border-radius: var(--radius-md);
+  padding: 14px 18px; box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: space-between;
+  border-left: 3px solid var(--p-blue-700);
+}
+.role-card.qa { border-left-color: var(--p-azur); }
+.role-card .meta { font-size: 12px; color: var(--gray-800); display: flex; align-items: center; gap: 6px; }
+.role-card .val { font-size: 18px; font-weight: 700; color: var(--gray-900); font-variant-numeric: tabular-nums; }
+
+/* Sprint-Eingabe */
+.sp-input-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+.sp-input { flex: 1; min-width: 140px; }
+.sp-input label { font-size: 12px; font-weight: 600; color: var(--gray-800); display: block; margin-bottom: 6px; }
+.sp-input label .material-symbols-outlined { font-size: 16px; vertical-align: -3px; margin-right: 4px; }
+.sp-input input { width: 100%; }
+
+/* Empty state */
+.empty { display: none; padding: 32px 16px; text-align: center; color: var(--gray-800); font-size: 14px; }
+.empty.show { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.empty .material-symbols-outlined { font-size: 36px; color: var(--gray-600); }
+
+.hidden { display: none; }
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--gray-900); color: var(--white);
+  padding: 12px 18px; border-radius: var(--radius-sm);
+  font-size: 14px; box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(8px); transition: all 0.25s ease; z-index: 1000;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.attendance-cell { display: inline-flex; align-items: center; gap: 4px; }
+.attendance-cell .max { color: var(--gray-600); font-size: 12px; }
+
+@media (max-width: 768px) {
+  .app-header { padding: 22px 20px 28px; }
+  main { padding: 22px 20px 40px; }
+  .title-block h1 { font-size: 26px; }
+  .role-info { grid-template-columns: 1fr; }
+  .usage-pct { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="app-header">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">K</div>
+        <div>
+          <div class="brand-name">procilon<span class="dot">.</span></div>
+          <div class="brand-sub">Kapazitätsplaner</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="date" id="header-date"></div>
+        <div>Sprint Planning</div>
+      </div>
+    </div>
+
+    <div class="title-block">
+      <h1>Kapazitätsplanung mit Klarheit.</h1>
+      <p class="lead">Plant die Sprint-Kapazität gemeinsam – Dev und QA in einer Sicht. Mitglieder und Settings werden einmalig in der Team-Verwaltung gepflegt; im Sprint Planning trägst du dann nur noch ein, wer wie viele Tage da ist („8 von 10") und wie viele Story Points geplant sind. Die Auslastung erscheint live, inklusive Aufteilung auf Dev und QA.</p>
+    </div>
+
+    <div class="view-toggle" role="tablist">
+      <button class="active" data-view="planning" role="tab">
+        <span class="material-symbols-outlined">insights</span>Planning
+      </button>
+      <button data-view="admin" role="tab">
+        <span class="material-symbols-outlined">manage_accounts</span>Team-Verwaltung
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============= PLANNING VIEW ============= -->
+    <section class="view active" id="view-planning" role="tabpanel">
+
+      <!-- Sprint-Eingabe -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">edit_calendar</span>Sprint-Planung</h2>
+          <div class="actions-row">
+            <button class="btn btn-secondary btn-sm" onclick="resetSprint()">
+              <span class="material-symbols-outlined">restart_alt</span>Sprint Reset
+            </button>
+          </div>
+        </div>
+        <div class="sp-input-row">
+          <div class="sp-input" style="flex: 1.5;">
+            <label><span class="material-symbols-outlined">flag</span>Geplante Story Points (Dev + QA)</label>
+            <input type="number" id="planned-sp" min="0" step="1" value="0" />
+          </div>
+          <div class="sp-input" style="flex: 0 0 auto;">
+            <label><span class="material-symbols-outlined">tune</span>Aktive Settings</label>
+            <div style="font-size: 13px; color: var(--gray-800); padding: 10px 0;">
+              <span id="settings-summary">—</span>
+              <button class="btn btn-ghost btn-sm" onclick="setView('admin')" style="margin-left: 8px;">
+                Ändern
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hauptauslastung -->
+      <div class="usage-main">
+        <div class="usage-head">
+          <div class="usage-label">
+            <span class="material-symbols-outlined">speed</span>Team-Auslastung
+          </div>
+          <div class="usage-pct" id="usage-pct">0 %</div>
+        </div>
+        <div class="usage-summary">
+          <strong id="usage-planned">0</strong> SP geplant ·
+          <strong id="usage-capacity">0</strong> SP Kapazität ·
+          <strong id="usage-members">0</strong> Personen
+        </div>
+        <div class="bar"><div class="bar-fill" id="usage-bar" style="width: 0%"></div></div>
+        <div class="usage-status">
+          <span id="usage-delta">—</span>
+          <span id="usage-status-label">—</span>
+        </div>
+      </div>
+
+      <!-- Sub-Info pro Rolle -->
+      <div class="role-info">
+        <div class="role-card">
+          <div class="meta">
+            <span class="chip chip-dev">DEV</span>
+            <span id="dev-headcount">0 Pers.</span>
+          </div>
+          <div>
+            <span class="val" id="dev-capacity">0</span>
+            <span style="font-size: 12px; color: var(--gray-800);"> SP Kapazität</span>
+          </div>
+        </div>
+        <div class="role-card qa">
+          <div class="meta">
+            <span class="chip chip-qa">QA</span>
+            <span id="qa-headcount">0 Pers.</span>
+          </div>
+          <div>
+            <span class="val" id="qa-capacity">0</span>
+            <span style="font-size: 12px; color: var(--gray-800);"> SP Kapazität</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglieder-Tabelle -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">groups</span>Mitglieder · Anwesenheit erfassen</h2>
+          <div class="actions-row">
+            <span style="font-size: 12px; color: var(--gray-600);" id="planning-hint">
+              Sprintlänge: <span id="planning-sprint-length">10</span> Werktage
+            </span>
+          </div>
+        </div>
+        <table id="planning-table">
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Rolle</th>
+              <th class="num">Verfügb.</th>
+              <th class="num">Anwesend</th>
+              <th class="num">Netto-Tage</th>
+              <th class="num">Kapazität (SP)</th>
+            </tr>
+          </thead>
+          <tbody id="planning-body"></tbody>
+          <tfoot>
+            <tr id="planning-total"></tr>
+          </tfoot>
+        </table>
+        <div class="empty" id="planning-empty">
+          <span class="material-symbols-outlined">person_off</span>
+          Noch keine Teammitglieder. Wechsle in die Team-Verwaltung, um welche anzulegen.
+        </div>
+      </div>
+
+      <details>
+        <summary style="cursor: pointer; color: var(--gray-800); font-size: 13px; padding: 8px 0;">
+          So wird gerechnet
+        </summary>
+        <div style="font-size: 13px; color: var(--gray-800); line-height: 1.7; padding: 8px 0;">
+          <p><strong>Netto-Tage</strong> = Anwesende Tage × (Verfügbarkeit ÷ 100) × (1 − Meeting-Abzug ÷ 100)</p>
+          <p><strong>Kapazität (SP)</strong> = Netto-Tage × SP-Faktor (rollenspezifisch: Dev oder QA)</p>
+          <p><strong>Auslastung %</strong> = Geplante SP ÷ Σ Kapazität × 100</p>
+          <p style="font-size: 12px; color: var(--gray-600); margin-top: 12px;">
+            Hinweis: Krankheit ist nicht eingerechnet. Reale Kapazität kann durch ungeplante Ausfälle sinken.
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============= ADMIN VIEW ============= -->
+    <section class="view" id="view-admin" role="tabpanel">
+
+      <!-- Team-Settings -->
+      <div class="card">
+        <h2><span class="material-symbols-outlined">settings</span>Team-Settings</h2>
+        <div class="row">
+          <div class="field">
+            <label for="sprint-days">Sprintlänge (Werktage)</label>
+            <input type="number" id="sprint-days" min="1" max="60" step="1" value="10" />
+          </div>
+          <div class="field">
+            <label for="meeting-share">Meeting-Abzug (% pauschal)</label>
+            <input type="number" id="meeting-share" min="0" max="80" step="5" value="20" />
+            <span class="hint">Geht für jeden Person prozentual ab (Dailies, Refinement, Reviews etc.)</span>
+          </div>
+          <div class="field">
+            <label for="sp-factor-dev">SP-Faktor Dev</label>
+            <input type="number" id="sp-factor-dev" min="0.1" max="3" step="0.05" value="0.7" />
+            <span class="hint">SP, die ein Dev-Tag bei voller Konzentration „wert" ist</span>
+          </div>
+          <div class="field">
+            <label for="sp-factor-qa">SP-Faktor QA</label>
+            <input type="number" id="sp-factor-qa" min="0.1" max="3" step="0.05" value="0.7" />
+            <span class="hint">SP, die ein QA-Tag „wert" ist (oft kleiner als Dev)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglied hinzufügen -->
+      <div class="card">
+        <h2><span class="material-symbols-outlined">person_add</span>Teammitglied hinzufügen</h2>
+        <div class="row">
+          <div class="field field-grow">
+            <label for="new-name">Name</label>
+            <input type="text" id="new-name" placeholder="z. B. Anna Müller"
+                   onkeydown="if(event.key==='Enter') addMember()" />
+          </div>
+          <div class="field">
+            <label for="new-availability">Basis-Verfügbarkeit (%)</label>
+            <input type="number" id="new-availability" min="0" max="100" step="5" value="100" />
+            <span class="hint">100 % = Vollzeit, 50 % = Halbzeit etc.</span>
+          </div>
+          <div class="field">
+            <label for="new-role">Rolle</label>
+            <select id="new-role">
+              <option value="dev">Dev</option>
+              <option value="qa">QA</option>
+            </select>
+          </div>
+          <div class="field field-fixed">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" onclick="addMember()">
+              <span class="material-symbols-outlined">add</span>Hinzufügen
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglieder-Verwaltung -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">groups</span>Team</h2>
+          <div class="actions-row">
+            <span style="font-size: 13px; color: var(--gray-800);" id="admin-count">0 Mitglieder</span>
+          </div>
+        </div>
+        <table id="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Rolle</th>
+              <th class="num">Verfügbarkeit (%)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="admin-body"></tbody>
+        </table>
+        <div class="empty" id="admin-empty">
+          <span class="material-symbols-outlined">person_off</span>
+          Noch keine Teammitglieder angelegt.
+        </div>
+      </div>
+
+      <!-- Daten verwalten -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">database</span>Daten verwalten</h2>
+          <div class="actions-row">
+            <button class="btn btn-secondary btn-sm" onclick="loadDemoData()">
+              <span class="material-symbols-outlined">science</span>Beispieldaten laden
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="exportData()">
+              <span class="material-symbols-outlined">download</span>Export (Backup)
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">
+              <span class="material-symbols-outlined">upload</span>Import
+            </button>
+            <input type="file" id="import-file" class="hidden" accept="application/json" onchange="importData(event)" />
+            <button class="btn btn-danger btn-sm" onclick="confirmReset()">
+              <span class="material-symbols-outlined">delete_forever</span>Alles löschen
+            </button>
+          </div>
+        </div>
+        <div style="font-size: 13px; color: var(--gray-800);">
+          „Beispieldaten" lädt ein 5er-Team mit gemischter Anwesenheit zum Ausprobieren.
+          Export speichert die Konfiguration als JSON. Import überschreibt alle aktuellen Daten.
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// State & Persistence
+// ============================================================
+const STORAGE_KEY = 'procilon_kapazitaetsplaner_v3';
+
+const defaultState = () => ({
+  // Stammdaten (Admin)
+  members: [],          // { id, name, baseAvailability, role: 'dev'|'qa' }
+  sprintDays: 10,
+  meetingShare: 20,     // global, %
+  spFactorDev: 0.7,
+  spFactorQa: 0.7,
+  // Sprint (Planning)
+  attendance: {},       // memberId -> Tage anwesend (Default: sprintDays)
+  plannedSp: 0,
+});
+
+let state = defaultState();
+
+// Locale-tolerantes Parsing
+function toNum(v, fallback = NaN) {
+  if (v === null || v === undefined || v === '') return fallback;
+  const n = parseFloat(String(v).replace(',', '.').trim());
+  return isNaN(n) ? fallback : n;
+}
+
+let storageWarned = false;
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    if (!storageWarned) {
+      storageWarned = true;
+      showToast('Hinweis: localStorage nicht verfügbar – Daten bleiben nur in dieser Sitzung.');
+    }
+  }
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      state = Object.assign(defaultState(), JSON.parse(raw));
+    } else {
+      // Erster Start: Beispieldaten laden, damit man sofort etwas sieht
+      state = demoState();
+      save();
+    }
+  } catch (e) {
+    console.warn('Konnte gespeicherten State nicht lesen', e);
+  }
+}
+
+function demoState() {
+  return {
+    members: [
+      { id: 'm1', name: 'Anna Müller',     baseAvailability: 100, role: 'dev' },
+      { id: 'm2', name: 'Bob Schmidt',     baseAvailability:  80, role: 'dev' },
+      { id: 'm3', name: 'Carla Schneider', baseAvailability: 100, role: 'dev' },
+      { id: 'm4', name: 'Dan Becker',      baseAvailability:  60, role: 'dev' },
+      { id: 'm5', name: 'Eva Lange',       baseAvailability: 100, role: 'qa'  },
+    ],
+    sprintDays: 10,
+    meetingShare: 20,
+    spFactorDev: 0.7,
+    spFactorQa: 0.5,
+    attendance: { m1: 8, m3: 7, m5: 9 },
+    plannedSp: 22,
+  };
+}
+function uid() { return Math.random().toString(36).slice(2, 10); }
+
+// ============================================================
+// View Toggle
+// ============================================================
+function setView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  document.querySelector(`.view-toggle button[data-view="${name}"]`).classList.add('active');
+}
+document.querySelectorAll('.view-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
+});
+
+// Header Date
+(function () {
+  const today = new Date();
+  const fmt = today.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('header-date').textContent = fmt;
+})();
+
+// ============================================================
+// Berechnungslogik
+// ============================================================
+function getAttendance(member) {
+  // Default: alle Sprinttage anwesend
+  const stored = state.attendance[member.id];
+  if (stored === undefined || stored === null || stored === '') return state.sprintDays;
+  return Math.max(0, Math.min(state.sprintDays, toNum(stored, state.sprintDays)));
+}
+function netDaysFor(member) {
+  const present = getAttendance(member);
+  const meetingFactor = 1 - (Math.max(0, Math.min(80, toNum(state.meetingShare, 0))) / 100);
+  return Math.max(0, present * (member.baseAvailability / 100) * meetingFactor);
+}
+function spFactorFor(member) {
+  return member.role === 'qa'
+    ? Math.max(0, toNum(state.spFactorQa, 0.7))
+    : Math.max(0, toNum(state.spFactorDev, 0.7));
+}
+function capacityFor(member) {
+  return netDaysFor(member) * spFactorFor(member);
+}
+function totals() {
+  return {
+    capacity: state.members.reduce((s, m) => s + capacityFor(m), 0),
+    planned: Math.max(0, toNum(state.plannedSp) || 0),
+    members: state.members.length,
+  };
+}
+function totalsByRole(role) {
+  const members = state.members.filter(m => m.role === role);
+  return {
+    members,
+    capacity: members.reduce((s, m) => s + capacityFor(m), 0),
+  };
+}
+
+// ============================================================
+// Render: Planning View
+// ============================================================
+function renderPlanning() {
+  const body = document.getElementById('planning-body');
+  const tot = document.getElementById('planning-total');
+  const empty = document.getElementById('planning-empty');
+
+  body.innerHTML = '';
+  tot.innerHTML = '';
+  document.getElementById('planning-sprint-length').textContent = state.sprintDays;
+
+  if (!state.members.length) {
+    empty.classList.add('show');
+    document.getElementById('planning-table').style.display = 'none';
+  } else {
+    empty.classList.remove('show');
+    document.getElementById('planning-table').style.display = '';
+
+    const sorted = [...state.members].sort((a, b) =>
+      a.role.localeCompare(b.role) || a.name.localeCompare(b.name, 'de')
+    );
+
+    let totalNet = 0, totalCap = 0;
+    sorted.forEach(m => {
+      const net = netDaysFor(m);
+      const cap = capacityFor(m);
+      const present = getAttendance(m);
+      totalNet += net; totalCap += cap;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(m.name)}</td>
+        <td><span class="chip chip-${m.role}">${m.role.toUpperCase()}</span></td>
+        <td class="num">${m.baseAvailability} %</td>
+        <td class="num">
+          <span class="attendance-cell">
+            <input type="number" class="compact" min="0" max="${state.sprintDays}" step="0.5"
+                   value="${present}"
+                   onchange="updateAttendance('${m.id}', this.value)" />
+            <span class="max">/ ${state.sprintDays}</span>
+          </span>
+        </td>
+        <td class="num">${net.toFixed(1)}</td>
+        <td class="num">${cap.toFixed(1)}</td>
+      `;
+      body.appendChild(tr);
+    });
+
+    tot.innerHTML = `
+      <td>Summe</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="num">${totalNet.toFixed(1)}</td>
+      <td class="num">${totalCap.toFixed(1)}</td>
+    `;
+  }
+
+  renderUsage();
+  renderSettingsSummary();
+}
+
+function renderUsage() {
+  const t = totals();
+  const dev = totalsByRole('dev');
+  const qa = totalsByRole('qa');
+
+  const pct = t.capacity > 0 ? (t.planned / t.capacity) * 100 : 0;
+  const pctRound = Math.round(pct);
+
+  document.getElementById('usage-pct').textContent = `${pctRound} %`;
+  document.getElementById('usage-planned').textContent = formatNum(t.planned);
+  document.getElementById('usage-capacity').textContent = formatNum(t.capacity);
+  document.getElementById('usage-members').textContent = t.members;
+
+  const bar = document.getElementById('usage-bar');
+  bar.style.width = Math.min(pct, 100) + '%';
+  bar.classList.toggle('over', pct > 100);
+
+  // Status & Delta
+  const delta = t.planned - t.capacity;
+  const deltaEl = document.getElementById('usage-delta');
+  if (t.capacity === 0) deltaEl.textContent = 'Keine Kapazität verfügbar';
+  else if (delta > 0) deltaEl.textContent = `Überplant: +${formatNum(delta)} SP über Kapazität`;
+  else if (delta < 0) deltaEl.textContent = `Reserve: ${formatNum(-delta)} SP frei`;
+  else deltaEl.textContent = 'Punktgenau';
+
+  const lbl = document.getElementById('usage-status-label');
+  if (t.capacity === 0) lbl.textContent = '—';
+  else if (pct > 100) lbl.textContent = 'überplant';
+  else if (pct > 90) lbl.textContent = 'voll';
+  else if (pct > 70) lbl.textContent = 'gut ausgelastet';
+  else if (pct > 0)  lbl.textContent = 'Luft nach oben';
+  else lbl.textContent = 'frei';
+
+  // Sub-Info pro Rolle
+  document.getElementById('dev-capacity').textContent = formatNum(dev.capacity);
+  document.getElementById('qa-capacity').textContent = formatNum(qa.capacity);
+  document.getElementById('dev-headcount').textContent =
+    `${dev.members.length} ${dev.members.length === 1 ? 'Person' : 'Pers.'}`;
+  document.getElementById('qa-headcount').textContent =
+    `${qa.members.length} ${qa.members.length === 1 ? 'Person' : 'Pers.'}`;
+}
+
+function renderSettingsSummary() {
+  document.getElementById('settings-summary').textContent =
+    `${state.sprintDays} WT · ${state.meetingShare} % Meetings · SP Dev ${state.spFactorDev} · QA ${state.spFactorQa}`;
+}
+
+// ============================================================
+// Render: Admin View
+// ============================================================
+function renderAdmin() {
+  const body = document.getElementById('admin-body');
+  const empty = document.getElementById('admin-empty');
+  const count = document.getElementById('admin-count');
+
+  body.innerHTML = '';
+  count.textContent = `${state.members.length} ${state.members.length === 1 ? 'Mitglied' : 'Mitglieder'}`;
+
+  if (!state.members.length) {
+    empty.classList.add('show');
+    document.getElementById('admin-table').style.display = 'none';
+    return;
+  }
+  empty.classList.remove('show');
+  document.getElementById('admin-table').style.display = '';
+
+  const sorted = [...state.members].sort((a, b) =>
+    a.role.localeCompare(b.role) || a.name.localeCompare(b.name, 'de')
+  );
+
+  sorted.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${escapeHtml(m.name)}" onchange="updateMember('${m.id}', 'name', this.value)" /></td>
+      <td>
+        <select onchange="updateMember('${m.id}', 'role', this.value)">
+          <option value="dev" ${m.role === 'dev' ? 'selected' : ''}>Dev</option>
+          <option value="qa"  ${m.role === 'qa'  ? 'selected' : ''}>QA</option>
+        </select>
+      </td>
+      <td class="num">
+        <input type="number" class="compact" min="0" max="100" step="5"
+               value="${m.baseAvailability}"
+               onchange="updateMember('${m.id}', 'baseAvailability', this.value)" />
+      </td>
+      <td style="text-align: right;">
+        <button class="btn btn-ghost btn-sm" style="color: var(--p-red);" onclick="removeMember('${m.id}')">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+// ============================================================
+// Mutations
+// ============================================================
+function addMember() {
+  const name = document.getElementById('new-name').value.trim();
+  const av = toNum(document.getElementById('new-availability').value);
+  const role = document.getElementById('new-role').value;
+  if (!name) { showToast('Bitte einen Namen eingeben.'); return; }
+  if (isNaN(av) || av < 0 || av > 100) { showToast('Verfügbarkeit muss zwischen 0 und 100 liegen.'); return; }
+  const id = uid();
+  state.members.push({ id, name, baseAvailability: av, role });
+  // Default-Anwesenheit = volle Sprintlänge
+  state.attendance[id] = state.sprintDays;
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-availability').value = 100;
+  document.getElementById('new-role').value = 'dev';
+  save(); renderAdmin(); renderPlanning();
+  showToast(`${name} hinzugefügt.`);
+}
+
+function removeMember(id) {
+  const m = state.members.find(x => x.id === id);
+  if (!m) return;
+  if (!confirm(`„${m.name}" wirklich entfernen?`)) return;
+  state.members = state.members.filter(x => x.id !== id);
+  delete state.attendance[id];
+  save(); renderAdmin(); renderPlanning();
+  showToast(`${m.name} entfernt.`);
+}
+
+function updateMember(id, field, value) {
+  const m = state.members.find(x => x.id === id);
+  if (!m) return;
+  if (field === 'baseAvailability') {
+    const n = toNum(value);
+    m.baseAvailability = isNaN(n) ? m.baseAvailability : Math.max(0, Math.min(100, n));
+  } else if (field === 'name') {
+    m.name = String(value).trim() || m.name;
+  } else if (field === 'role') {
+    m.role = (value === 'qa') ? 'qa' : 'dev';
+  }
+  save(); renderAdmin(); renderPlanning();
+}
+
+function updateAttendance(id, value) {
+  const n = Math.max(0, Math.min(state.sprintDays, toNum(value, state.sprintDays)));
+  state.attendance[id] = n;
+  save(); renderPlanning();
+}
+
+function resetSprint() {
+  if (!confirm('Anwesenheit (alle voll da) und geplante SP auf Default zurücksetzen? Mitglieder und Settings bleiben.')) return;
+  state.attendance = {};
+  state.plannedSp = 0;
+  document.getElementById('planned-sp').value = 0;
+  save(); renderPlanning();
+  showToast('Sprint zurückgesetzt.');
+}
+
+function confirmReset() {
+  if (!confirm('Komplett alles löschen? Mitglieder, Settings und Sprint-Daten gehen verloren.')) return;
+  state = defaultState();
+  save();
+  syncSettingsInputs();
+  renderAdmin(); renderPlanning();
+  showToast('Alle Daten gelöscht.');
+}
+
+function loadDemoData() {
+  if (state.members.length > 0) {
+    if (!confirm('Aktuelle Daten werden durch das Beispiel-Team überschrieben. Fortfahren?')) return;
+  }
+  state = demoState();
+  save();
+  syncSettingsInputs();
+  renderAdmin(); renderPlanning();
+  showToast('Beispieldaten geladen – siehe Planning-Ansicht.');
+  setView('planning');
+}
+
+// ============================================================
+// Settings sync
+// ============================================================
+function syncSettingsInputs() {
+  document.getElementById('sprint-days').value = state.sprintDays;
+  document.getElementById('meeting-share').value = state.meetingShare;
+  document.getElementById('sp-factor-dev').value = state.spFactorDev;
+  document.getElementById('sp-factor-qa').value = state.spFactorQa;
+  document.getElementById('planned-sp').value = state.plannedSp;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  load();
+  syncSettingsInputs();
+  renderAdmin();
+  renderPlanning();
+
+  document.getElementById('sprint-days').addEventListener('input', e => {
+    const n = Math.max(1, Math.min(60, parseInt(e.target.value) || 1));
+    state.sprintDays = n;
+    // Anwesenheits-Werte clampen, falls jemand mehr Tage hatte als jetzt
+    Object.keys(state.attendance).forEach(id => {
+      if (state.attendance[id] > n) state.attendance[id] = n;
+    });
+    save(); renderPlanning();
+  });
+  document.getElementById('meeting-share').addEventListener('input', e => {
+    const n = Math.max(0, Math.min(80, toNum(e.target.value) || 0));
+    state.meetingShare = n;
+    save(); renderPlanning();
+  });
+  document.getElementById('sp-factor-dev').addEventListener('input', e => {
+    state.spFactorDev = Math.max(0.1, Math.min(3, toNum(e.target.value) || 0.1));
+    save(); renderPlanning();
+  });
+  document.getElementById('sp-factor-qa').addEventListener('input', e => {
+    state.spFactorQa = Math.max(0.1, Math.min(3, toNum(e.target.value) || 0.1));
+    save(); renderPlanning();
+  });
+  document.getElementById('planned-sp').addEventListener('input', e => {
+    state.plannedSp = Math.max(0, toNum(e.target.value) || 0);
+    save(); renderUsage();
+  });
+});
+
+// ============================================================
+// Export / Import
+// ============================================================
+function exportData() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ts = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `kapazitaetsplaner_${ts}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup exportiert.');
+}
+
+function importData(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported || typeof imported !== 'object' || !Array.isArray(imported.members)) {
+        showToast('Datei sieht nicht wie ein gültiger Export aus.'); return;
+      }
+      if (!confirm('Aktuelle Konfiguration wirklich überschreiben?')) return;
+      state = Object.assign(defaultState(), imported);
+      save();
+      syncSettingsInputs();
+      renderAdmin(); renderPlanning();
+      showToast('Import erfolgreich.');
+    } catch (err) {
+      showToast('Fehler beim Lesen: ' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// Helpers
+// ============================================================
+function formatNum(n) {
+  const num = toNum(n) || 0;
+  return Number.isInteger(num) ? String(num) : num.toFixed(1);
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._tid);
+  showToast._tid = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
