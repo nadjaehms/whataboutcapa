@@ -9,1697 +9,963 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 <style>
-/* ============================================================
-   Procilon Design System – Kapazitätsplaner
-   Farben: Blue-900 #001965 / Blue-800 #002698 / Blue-700 #0044cc
-           Blue-600 #0055ff / Blue-500 #3287ff / Blue-400 #66b2ff
-           Blue-300 #99d4ff / Blue-200 #bfeaff / Blue-100 #d9f2ff
-   Neutral: Gray-900 #1e2237 (Text) / Gray-800 #5b6375 / Gray-600 #999fa8
-            Gray-300 #cad6de / Gray-100 #e6eef2 (Offwhite)
-   Akzent: Procilon-Red #ff5444 (sehr sparsam, nur CTA/Warnung)
-   Sekundär: Azur #00ccbb / Limette #afd907 / Violett #be7dff
-   Schrift: Segoe UI (Office-Fallback per Styleguide), Inter Web-Fallback
-============================================================ */
-
 :root {
-  --p-blue-900: #001965;
-  --p-blue-800: #002698;
-  --p-blue-700: #0044cc;
-  --p-blue-600: #0055ff;
-  --p-blue-500: #3287ff;
-  --p-blue-400: #66b2ff;
-  --p-blue-300: #99d4ff;
-  --p-blue-200: #bfeaff;
-  --p-blue-100: #d9f2ff;
-  --p-red:      #ff5444;
-  --p-azur:     #00ccbb;
-  --p-limette:  #afd907;
-  --p-violett:  #be7dff;
-
-  --gray-900: #1e2237;
-  --gray-800: #5b6375;
-  --gray-600: #999fa8;
-  --gray-300: #cad6de;
-  --gray-100: #e6eef2;
-  --offwhite: #e6eef2;
-  --white:    #ffffff;
-
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-
+  --p-blue-900: #001965; --p-blue-800: #002698; --p-blue-700: #0044cc;
+  --p-blue-600: #0055ff; --p-blue-500: #3287ff; --p-blue-400: #66b2ff;
+  --p-blue-300: #99d4ff; --p-blue-200: #bfeaff; --p-blue-100: #d9f2ff;
+  --p-red: #ff5444; --p-azur: #00ccbb; --p-limette: #afd907; --p-violett: #be7dff;
+  --gray-900: #1e2237; --gray-800: #5b6375; --gray-600: #999fa8;
+  --gray-300: #cad6de; --gray-100: #e6eef2; --offwhite: #e6eef2; --white: #ffffff;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
   --shadow-sm: 0 1px 2px rgba(0,25,101,0.04), 0 2px 6px rgba(0,25,101,0.04);
   --shadow-md: 0 4px 12px rgba(0,25,101,0.06), 0 12px 28px rgba(0,25,101,0.06);
   --shadow-lg: 0 8px 24px rgba(0,25,101,0.08), 0 24px 48px rgba(0,25,101,0.10);
-
-  --font-sans: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  --font-display: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-sans: 'Segoe UI','Inter',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  --font-display: 'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
 }
-
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  color: var(--gray-900);
-  background: var(--offwhite);
-  line-height: 1.55;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans); font-size: 15px;
+  color: var(--gray-900); background: var(--offwhite);
+  line-height: 1.55; min-height: 100vh;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-
-/* ============================================================
-   Header – Blue-Verlauf 900→800→700 mit Hexagon-Raster
-============================================================ */
-.shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-header {
+  background: linear-gradient(135deg, var(--p-blue-900) 0%, var(--p-blue-800) 50%, var(--p-blue-700) 100%);
+  color: var(--white); padding: 28px 40px 36px; position: relative; overflow: hidden;
 }
-header.app-header {
-  position: relative;
-  background: var(--white);
-  color: var(--gray-900);
-  padding: 28px 40px 32px;
-  overflow: hidden;
-  isolation: isolate;
-}
-header.app-header::before {
-  content: none;
-  background: none;
-  mask-image: none;
-  -webkit-mask-image: none;
+.app-header::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 20%, rgba(255,255,255,0.06) 0, rgba(255,255,255,0) 28%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0, rgba(255,255,255,0) 30%);
   pointer-events: none;
-  z-index: -1;
 }
-.brand-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+.brand-row { display: flex; justify-content: space-between; align-items: center; gap: 24px; position: relative; }
+.brand { display: flex; align-items: center; gap: 14px; }
 .brand-logo {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: rgba(0,25,101,0.06);
-  border: 1px solid rgba(0,25,101,0.18);
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
+  width: 44px; height: 44px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--p-blue-500), var(--p-blue-300));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 18px; color: var(--p-blue-900);
+  box-shadow: var(--shadow-md);
 }
-.brand-logo svg { display: block; }
-.brand-name {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--p-blue-900);
-}
-.brand-name .dot { color: var(--p-blue-300); }
-.brand-sub {
-  display: block;
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.7;
-  margin-top: 4px;
-}
-.header-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  font-size: 13px;
-  opacity: 0.8;
-}
-.header-meta .date { font-variant-numeric: tabular-nums; }
-.team-picker {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  margin-top: 10px;
-}
-.team-picker label {
-  font-size: 11px;
-  color: var(--gray-800);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.team-picker input {
-  font-family: inherit;
-  font-size: 13px;
-  padding: 8px 10px;
-  border: 1px solid rgba(91,99,117,0.35);
-  border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.92);
-  color: var(--gray-900);
-  width: 210px;
-}
-.team-picker input:focus {
-  outline: none;
-  border-color: var(--p-blue-600);
-  box-shadow: 0 0 0 4px rgba(0,85,255,0.12);
-}
-.title-block {
-  margin-top: 28px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
+.brand-name { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.brand-name .dot { color: var(--p-azur); }
+.brand-sub { font-size: 12px; color: var(--p-blue-200); }
+.header-meta { text-align: right; font-size: 13px; color: var(--p-blue-200); }
+.header-meta .date { font-weight: 500; color: var(--white); }
+.title-block { margin-top: 22px; position: relative; }
 .title-block h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 34px;
-  letter-spacing: -0.02em;
-  margin: 0 0 6px 0;
-  line-height: 1.15;
+  margin: 0; font-family: var(--font-display);
+  font-size: 32px; font-weight: 700; letter-spacing: -0.02em;
 }
-.title-block p {
-  margin: 0;
-  font-size: 15px;
-  opacity: 0.82;
-  max-width: 640px;
+.title-block .lead { margin: 8px 0 0; color: var(--p-blue-200); font-size: 14px; max-width: 820px; line-height: 1.6; }
+.view-toggle {
+  display: inline-flex; gap: 4px; padding: 4px;
+  background: rgba(255,255,255,0.1); border-radius: var(--radius-md);
+  margin-top: 22px; backdrop-filter: blur(8px); position: relative;
 }
-
-/* ============================================================
-   Tabs
-============================================================ */
-.tabs-wrap {
-  background: var(--white);
-  border-bottom: 1px solid var(--gray-300);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  backdrop-filter: saturate(180%) blur(10px);
-  background: rgba(255,255,255,0.94);
+.view-toggle button {
+  background: transparent; border: 0; cursor: pointer;
+  padding: 9px 18px; border-radius: 10px;
+  color: var(--p-blue-100); font: inherit; font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.18s ease;
 }
-.tabs {
-  display: flex;
-  gap: 2px;
-  padding: 0 40px;
-  overflow-x: auto;
-  max-width: 1200px;
-  margin: 0 auto;
-  scrollbar-width: none;
-}
-.tabs::-webkit-scrollbar { display: none; }
-.tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 18px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--gray-800);
-  white-space: nowrap;
-  transition: color 0.18s, border-color 0.18s;
-}
-.tab .material-symbols-outlined { font-size: 20px; }
-.tab:hover { color: var(--p-blue-700); }
-.tab.active {
-  color: var(--p-blue-900);
-  border-bottom-color: var(--p-blue-700);
-  font-weight: 600;
-}
-
-/* ============================================================
-   Layout
-============================================================ */
-main {
-  flex: 1;
-  padding: 32px 40px 96px;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-.panel { display: none; animation: fadeIn 0.25s ease; }
-.panel.active { display: block; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================================================
-   Cards
-============================================================ */
-.card {
-  background: var(--white);
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  margin-bottom: 18px;
+.view-toggle button .material-symbols-outlined { font-size: 18px; }
+.view-toggle button:hover { color: var(--white); }
+.view-toggle button.active {
+  background: var(--white); color: var(--p-blue-900); font-weight: 600;
   box-shadow: var(--shadow-sm);
+}
+main { flex: 1; padding: 32px 40px 56px; max-width: 1400px; margin: 0 auto; width: 100%; }
+.view { display: none; }
+.view.active { display: block; }
+.card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 24px 28px; box-shadow: var(--shadow-sm); margin-bottom: 20px;
 }
 .card h2 {
-  margin: 0 0 6px 0;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--p-blue-900);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--gray-800); font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
 }
 .card h2 .material-symbols-outlined { font-size: 20px; color: var(--p-blue-700); }
-.card .hint {
-  margin: 0 0 18px 0;
-  color: var(--gray-800);
-  font-size: 13px;
-}
-
-/* ============================================================
-   Inputs
-============================================================ */
-.row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
-.field { display: flex; flex-direction: column; gap: 6px; min-width: 130px; flex: 1; }
-.field label {
-  font-size: 11px;
-  color: var(--gray-800);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.field input, .field select, .input {
-  font-family: inherit;
-  font-size: 14px;
-  padding: 10px 12px;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-sm);
-  background: var(--white);
-  color: var(--gray-900);
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-}
-.field input:hover, .field select:hover { border-color: var(--p-blue-400); }
-.field input:focus, .field select:focus {
-  outline: none;
-  border-color: var(--p-blue-600);
-  box-shadow: 0 0 0 4px rgba(0,85,255,0.12);
-  background: var(--white);
-}
-.field-grow { flex: 2; }
-.field-fixed { flex: 0 0 auto; }
-
-/* ============================================================
-   Buttons
-============================================================ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.06s;
-  white-space: nowrap;
-}
-.btn .material-symbols-outlined { font-size: 18px; }
-.btn:active { transform: translateY(1px); }
-
-.btn-primary {
-  background: var(--p-blue-700);
-  color: var(--white);
-}
-.btn-primary:hover { background: var(--p-blue-800); }
-
-.btn-secondary {
-  background: var(--white);
-  color: var(--p-blue-900);
-  border-color: var(--gray-300);
-}
-.btn-secondary:hover { border-color: var(--p-blue-600); color: var(--p-blue-700); }
-
-.btn-cta {
-  /* Procilon-Red sparsam für entscheidende CTAs */
-  background: var(--p-red);
-  color: var(--white);
-}
-.btn-cta:hover { background: #e6483a; }
-
-.btn-icon {
-  background: transparent;
-  border: none;
-  padding: 6px;
-  border-radius: 6px;
-  color: var(--gray-800);
-  cursor: pointer;
-  display: inline-grid;
-  place-items: center;
-  transition: background 0.15s, color 0.15s;
-}
-.btn-icon:hover { background: var(--gray-100); color: var(--p-blue-700); }
-.btn-icon.danger:hover { background: rgba(255,84,68,0.12); color: var(--p-red); }
-.btn-icon .material-symbols-outlined { font-size: 20px; }
-
-/* ============================================================
-   Tables
-============================================================ */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 14px;
-}
-thead th {
-  text-align: left;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--gray-800);
-  font-weight: 600;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--gray-300);
-  background: var(--gray-100);
-}
-thead th:first-child { border-top-left-radius: var(--radius-sm); }
-thead th:last-child  { border-top-right-radius: var(--radius-sm); }
-tbody td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--gray-300);
-  color: var(--gray-900);
-  vertical-align: middle;
-}
-tbody tr:last-child td { border-bottom: none; }
-tbody tr { transition: background 0.12s; }
-tbody tr:hover { background: rgba(217,242,255,0.4); }
-tfoot td {
-  padding: 14px;
-  background: var(--p-blue-100);
-  color: var(--p-blue-900);
-  font-weight: 700;
-  border-top: 1px solid var(--gray-300);
-}
-tfoot td:first-child { border-bottom-left-radius: var(--radius-sm); }
-tfoot td:last-child  { border-bottom-right-radius: var(--radius-sm); }
-.num { text-align: right; font-variant-numeric: tabular-nums; }
-
-.inline-edit {
-  border: none;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  width: 100%;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: background 0.12s, box-shadow 0.12s;
-}
-.inline-edit:hover { background: var(--gray-100); }
-.inline-edit:focus {
-  outline: none;
-  background: var(--white);
-  box-shadow: 0 0 0 2px var(--p-blue-300);
-}
-.inline-edit-num {
-  width: 70px;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ============================================================
-   Empty state
-============================================================ */
-.empty {
-  text-align: center;
-  color: var(--gray-800);
-  padding: 40px 20px;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.empty .material-symbols-outlined {
-  font-size: 40px;
-  color: var(--p-blue-400);
-}
-
-/* ============================================================
-   Badges
-============================================================ */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-.badge .material-symbols-outlined { font-size: 14px; }
-.badge-vacation { background: rgba(0,204,187,0.15); color: #006d63; }
-.badge-sick     { background: rgba(255,84,68,0.12); color: #b03124; }
-.badge-training { background: rgba(190,125,255,0.15); color: #6e2ec4; }
-.badge-other    { background: var(--gray-100); color: var(--gray-800); }
-
-/* ============================================================
-   KPI Stats
-============================================================ */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 22px;
-}
-.stat {
-  position: relative;
-  background: var(--white);
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  padding: 20px 22px;
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  isolation: isolate;
-}
-.stat::after {
-  content: "";
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  width: 90px;
-  height: 90px;
-  background: linear-gradient(135deg, var(--p-blue-100), transparent 70%);
-  border-radius: 999px;
-  z-index: -1;
-}
-.stat-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, var(--p-blue-700), var(--p-blue-500));
-  color: var(--white);
-  margin-bottom: 12px;
-  box-shadow: 0 6px 14px rgba(0,68,204,0.25);
-}
-.stat-icon .material-symbols-outlined { font-size: 20px; }
-.stat-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-  color: var(--gray-800);
-  margin-bottom: 4px;
-}
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--p-blue-900);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.1;
-}
-.stat-sub {
-  font-size: 12px;
-  color: var(--gray-800);
-  margin-top: 6px;
-}
-.stat.featured {
-  background: linear-gradient(135deg, #001965 0%, #002698 60%, #0044cc 100%);
-  border-color: transparent;
-  color: var(--white);
-}
-.stat.featured::after {
-  background: radial-gradient(circle at top right, rgba(102,178,255,0.3), transparent 70%);
-}
-.stat.featured .stat-icon {
-  background: rgba(255,255,255,0.18);
-  box-shadow: none;
-  border: 1px solid rgba(255,255,255,0.25);
-}
-.stat.featured .stat-label { color: rgba(255,255,255,0.78); }
-.stat.featured .stat-value { color: var(--white); }
-.stat.featured .stat-sub   { color: rgba(255,255,255,0.78); }
-
-.progress {
-  height: 8px;
-  background: rgba(255,255,255,0.20);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-top: 10px;
-}
-.stat:not(.featured) .progress { background: var(--gray-100); }
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--p-blue-300), var(--white));
-  border-radius: inherit;
-  transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.stat:not(.featured) .progress-bar { background: linear-gradient(90deg, var(--p-blue-600), var(--p-blue-400)); }
-.progress-bar.warn { background: linear-gradient(90deg, #c97a16, #f0a847) !important; }
-.progress-bar.over { background: linear-gradient(90deg, #b03124, var(--p-red)) !important; }
-
-/* ============================================================
-   Holiday chips
-============================================================ */
-.holiday-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding: 4px;
-}
-.holiday-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--p-blue-100);
-  color: var(--p-blue-800);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid rgba(0,85,255,0.12);
-}
-.holiday-chip .material-symbols-outlined { font-size: 16px; color: var(--p-blue-600); }
-
-/* ============================================================
-   Toolbar / actions
-============================================================ */
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .toolbar h2 { margin: 0; }
 .actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.footnote { color: var(--gray-800); font-size: 12px; }
-.summary-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--gray-100);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  color: var(--gray-800);
-  font-weight: 500;
+.row { display: flex; gap: 14px; flex-wrap: wrap; }
+.field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+.field-grow { flex: 2; }
+.field-fixed { flex: 0 0 auto; min-width: auto; align-self: end; }
+.field label { font-size: 12px; font-weight: 500; color: var(--gray-800); }
+.field .hint { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+input[type="text"], input[type="number"], select {
+  font: inherit; font-size: 14px;
+  padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--gray-900); transition: all 0.15s ease;
 }
-.summary-pill .material-symbols-outlined { font-size: 16px; color: var(--p-blue-700); }
-.toggle-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--gray-100);
-  border: 1px solid var(--gray-300);
-  border-radius: 999px;
-  padding: 4px;
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+  outline: none; border-color: var(--p-blue-500);
+  box-shadow: 0 0 0 3px rgba(50,135,255,0.15);
 }
-.toggle-btn {
-  border: none;
-  background: transparent;
-  color: var(--gray-800);
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
+input[type="number"].compact { padding: 6px 10px; max-width: 90px; text-align: right; }
+.btn {
+  font: inherit; font-size: 14px; font-weight: 600;
+  padding: 10px 18px; border-radius: var(--radius-sm); border: 0;
+  cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 6px;
 }
-.toggle-btn.active {
-  background: var(--white);
-  color: var(--p-blue-900);
-  box-shadow: var(--shadow-sm);
+.btn .material-symbols-outlined { font-size: 18px; }
+.btn-primary { background: var(--p-blue-700); color: var(--white); }
+.btn-primary:hover { background: var(--p-blue-800); }
+.btn-secondary { background: var(--gray-100); color: var(--gray-900); }
+.btn-secondary:hover { background: var(--gray-300); }
+.btn-danger { background: var(--p-red); color: var(--white); }
+.btn-danger:hover { filter: brightness(0.95); }
+.btn-ghost { background: transparent; color: var(--p-blue-700); padding: 6px 10px; }
+.btn-ghost:hover { background: var(--p-blue-100); }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+table th, table td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--gray-100); }
+table th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-800); font-weight: 600; }
+table td.num, table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table tfoot td { font-weight: 700; border-top: 2px solid var(--gray-300); border-bottom: 0; padding-top: 14px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
 }
-.tiny-table td, .tiny-table th {
-  font-size: 12px;
-  padding: 8px 10px;
+.chip-dev { background: rgba(0,68,204,0.08); color: var(--p-blue-700); }
+.chip-qa  { background: rgba(0,204,187,0.12); color: #00857a; }
+
+/* Hauptauslastung */
+.usage-main {
+  background: linear-gradient(135deg, var(--white), #fafcff);
+  border-radius: var(--radius-lg); padding: 28px 32px;
+  box-shadow: var(--shadow-md); margin-bottom: 16px;
+  border: 1px solid var(--gray-100);
+}
+.usage-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px; margin-bottom: 14px;
+}
+.usage-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gray-800); font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+.usage-label .material-symbols-outlined { font-size: 18px; color: var(--p-blue-700); }
+.usage-pct {
+  font-size: 44px; font-weight: 800; letter-spacing: -0.03em; color: var(--gray-900);
+  line-height: 1;
+}
+.usage-summary { font-size: 14px; color: var(--gray-800); margin-bottom: 14px; }
+.usage-summary strong { color: var(--gray-900); }
+.bar { height: 16px; background: var(--gray-100); border-radius: 8px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--p-blue-500), var(--p-blue-700));
+  transition: width 0.4s ease;
+}
+.bar-fill.over { background: linear-gradient(90deg, #ff7f6e, var(--p-red)) !important; }
+.usage-status {
+  margin-top: 10px; font-size: 13px; color: var(--gray-800);
+  display: flex; justify-content: space-between;
 }
 
-details {
-  background: var(--white);
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  padding: 14px 18px;
-  margin-bottom: 18px;
-  box-shadow: var(--shadow-sm);
+/* Sub-Info pro Rolle */
+.role-info {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
 }
-details summary {
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--gray-800);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
+.role-card {
+  background: var(--white); border-radius: var(--radius-md);
+  padding: 14px 18px; box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: space-between;
+  border-left: 3px solid var(--p-blue-700);
 }
-details summary::-webkit-details-marker { display: none; }
-details summary::before {
-  content: "expand_more";
-  font-family: 'Material Symbols Outlined';
-  font-size: 20px;
-  color: var(--p-blue-700);
-  transition: transform 0.2s;
-}
-details[open] summary::before { transform: rotate(180deg); }
-details p { margin: 12px 0 0 28px; font-size: 13px; color: var(--gray-800); }
+.role-card.qa { border-left-color: var(--p-azur); }
+.role-card .meta { font-size: 12px; color: var(--gray-800); display: flex; align-items: center; gap: 6px; }
+.role-card .val { font-size: 18px; font-weight: 700; color: var(--gray-900); font-variant-numeric: tabular-nums; }
 
-footer.app-footer {
-  text-align: center;
-  padding: 28px 40px 36px;
-  font-size: 12px;
-  color: var(--gray-800);
-  background: var(--white);
-  border-top: 1px solid var(--gray-300);
-}
-footer.app-footer span { color: var(--p-blue-700); font-weight: 600; }
+/* Sprint-Eingabe */
+.sp-input-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+.sp-input { flex: 1; min-width: 140px; }
+.sp-input label { font-size: 12px; font-weight: 600; color: var(--gray-800); display: block; margin-bottom: 6px; }
+.sp-input label .material-symbols-outlined { font-size: 16px; vertical-align: -3px; margin-right: 4px; }
+.sp-input input { width: 100%; }
 
-@media (max-width: 720px) {
-  header.app-header, .tabs, main, footer.app-footer { padding-left: 18px; padding-right: 18px; }
+/* Empty state */
+.empty { display: none; padding: 32px 16px; text-align: center; color: var(--gray-800); font-size: 14px; }
+.empty.show { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.empty .material-symbols-outlined { font-size: 36px; color: var(--gray-600); }
+
+.hidden { display: none; }
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--gray-900); color: var(--white);
+  padding: 12px 18px; border-radius: var(--radius-sm);
+  font-size: 14px; box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(8px); transition: all 0.25s ease; z-index: 1000;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.attendance-cell { display: inline-flex; align-items: center; gap: 4px; }
+.attendance-cell .max { color: var(--gray-600); font-size: 12px; }
+
+@media (max-width: 768px) {
+  .app-header { padding: 22px 20px 28px; }
+  main { padding: 22px 20px 40px; }
   .title-block h1 { font-size: 26px; }
-  .stat-value { font-size: 24px; }
-  .field { min-width: 110px; }
+  .role-info { grid-template-columns: 1fr; }
+  .usage-pct { font-size: 36px; }
 }
 </style>
 </head>
 <body>
 <div class="shell">
 
-<header class="app-header">
-  <div class="brand-row">
-    <div class="brand">
-      <div class="brand-logo" aria-hidden="true">
-        <!-- Stilisiertes "P" als Platzhalter; orientiert sich an Procilon-Eiskristall-Motiv -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 4 H13 A6 6 0 0 1 13 16 H9 V21" stroke="#001965" stroke-width="2.6" stroke-linecap="square" fill="none"/>
-          <circle cx="17.5" cy="6.5" r="1.4" fill="#001965"/>
-        </svg>
+  <header class="app-header">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">K</div>
+        <div>
+          <div class="brand-name">procilon<span class="dot">.</span></div>
+          <div class="brand-sub">Kapazitätsplaner</div>
+        </div>
       </div>
-      <div>
-        <div class="brand-name">procilon<span class="dot">.</span></div>
-        <span class="brand-sub">Capacity Planner</span>
-      </div>
-    </div>
-    <div class="header-meta">
-      <div class="date" id="header-date"></div>
-      <div>Entwicklungsteam · Sprint Planning</div>
-      <div class="team-picker">
-        <label for="team-id">Team-Kürzel</label>
-        <input id="team-id" type="text" placeholder="z.B. TeamA" autocomplete="off" />
+      <div class="header-meta">
+        <div class="date" id="header-date"></div>
+        <div>Sprint Planning</div>
       </div>
     </div>
-  </div>
-  <div class="title-block">
-    <h1>Kapazitätsplanung mit Klarheit.</h1>
-    <p>Verfügbare Story Points und Auslastung Ihres Entwicklungsteams für jeden Zeitraum, FTE‑genau und unter Berücksichtigung von Feiertagen und Abwesenheiten.</p>
-  </div>
-</header>
 
-<div class="tabs-wrap">
-  <nav class="tabs" aria-label="Bereiche">
-    <button class="tab active" data-panel="team"><span class="material-symbols-outlined">groups</span>Team</button>
-    <button class="tab" data-panel="absences"><span class="material-symbols-outlined">event_busy</span>Abwesenheiten</button>
-    <button class="tab" data-panel="holidays"><span class="material-symbols-outlined">flag</span>Feiertage</button>
-    <button class="tab" data-panel="calc"><span class="material-symbols-outlined">insights</span>Berechnung</button>
-  </nav>
+    <div class="title-block">
+      <h1>Kapazitätsplanung mit Klarheit.</h1>
+      <p class="lead">Plant die Sprint-Kapazität gemeinsam – Dev und QA in einer Sicht. Mitglieder und Settings werden einmalig in der Team-Verwaltung gepflegt; im Sprint Planning trägst du dann nur noch ein, wer wie viele Tage da ist („8 von 10") und wie viele Story Points geplant sind. Die Auslastung erscheint live, inklusive Aufteilung auf Dev und QA.</p>
+    </div>
+
+    <div class="view-toggle" role="tablist">
+      <button class="active" data-view="planning" role="tab">
+        <span class="material-symbols-outlined">insights</span>Planning
+      </button>
+      <button data-view="admin" role="tab">
+        <span class="material-symbols-outlined">manage_accounts</span>Team-Verwaltung
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============= PLANNING VIEW ============= -->
+    <section class="view active" id="view-planning" role="tabpanel">
+
+      <!-- Sprint-Eingabe -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">edit_calendar</span>Sprint-Planung</h2>
+          <div class="actions-row">
+            <button class="btn btn-secondary btn-sm" onclick="resetSprint()">
+              <span class="material-symbols-outlined">restart_alt</span>Sprint Reset
+            </button>
+          </div>
+        </div>
+        <div class="sp-input-row">
+          <div class="sp-input" style="flex: 1.5;">
+            <label><span class="material-symbols-outlined">flag</span>Geplante Story Points (Dev + QA)</label>
+            <input type="number" id="planned-sp" min="0" step="1" value="0" />
+          </div>
+          <div class="sp-input" style="flex: 0 0 auto;">
+            <label><span class="material-symbols-outlined">tune</span>Aktive Settings</label>
+            <div style="font-size: 13px; color: var(--gray-800); padding: 10px 0;">
+              <span id="settings-summary">—</span>
+              <button class="btn btn-ghost btn-sm" onclick="setView('admin')" style="margin-left: 8px;">
+                Ändern
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hauptauslastung -->
+      <div class="usage-main">
+        <div class="usage-head">
+          <div class="usage-label">
+            <span class="material-symbols-outlined">speed</span>Team-Auslastung
+          </div>
+          <div class="usage-pct" id="usage-pct">0 %</div>
+        </div>
+        <div class="usage-summary">
+          <strong id="usage-planned">0</strong> SP geplant ·
+          <strong id="usage-capacity">0</strong> SP Kapazität ·
+          <strong id="usage-members">0</strong> Personen
+        </div>
+        <div class="bar"><div class="bar-fill" id="usage-bar" style="width: 0%"></div></div>
+        <div class="usage-status">
+          <span id="usage-delta">—</span>
+          <span id="usage-status-label">—</span>
+        </div>
+      </div>
+
+      <!-- Sub-Info pro Rolle -->
+      <div class="role-info">
+        <div class="role-card">
+          <div class="meta">
+            <span class="chip chip-dev">DEV</span>
+            <span id="dev-headcount">0 Pers.</span>
+          </div>
+          <div>
+            <span class="val" id="dev-capacity">0</span>
+            <span style="font-size: 12px; color: var(--gray-800);"> SP Kapazität</span>
+          </div>
+        </div>
+        <div class="role-card qa">
+          <div class="meta">
+            <span class="chip chip-qa">QA</span>
+            <span id="qa-headcount">0 Pers.</span>
+          </div>
+          <div>
+            <span class="val" id="qa-capacity">0</span>
+            <span style="font-size: 12px; color: var(--gray-800);"> SP Kapazität</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglieder-Tabelle -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">groups</span>Mitglieder · Anwesenheit erfassen</h2>
+          <div class="actions-row">
+            <span style="font-size: 12px; color: var(--gray-600);" id="planning-hint">
+              Sprintlänge: <span id="planning-sprint-length">10</span> Werktage
+            </span>
+          </div>
+        </div>
+        <table id="planning-table">
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Rolle</th>
+              <th class="num">Verfügb.</th>
+              <th class="num">Anwesend</th>
+              <th class="num">Netto-Tage</th>
+              <th class="num">Kapazität (SP)</th>
+            </tr>
+          </thead>
+          <tbody id="planning-body"></tbody>
+          <tfoot>
+            <tr id="planning-total"></tr>
+          </tfoot>
+        </table>
+        <div class="empty" id="planning-empty">
+          <span class="material-symbols-outlined">person_off</span>
+          Noch keine Teammitglieder. Wechsle in die Team-Verwaltung, um welche anzulegen.
+        </div>
+      </div>
+
+      <details>
+        <summary style="cursor: pointer; color: var(--gray-800); font-size: 13px; padding: 8px 0;">
+          So wird gerechnet
+        </summary>
+        <div style="font-size: 13px; color: var(--gray-800); line-height: 1.7; padding: 8px 0;">
+          <p><strong>Netto-Tage</strong> = Anwesende Tage × (Verfügbarkeit ÷ 100) × (1 − Meeting-Abzug ÷ 100)</p>
+          <p><strong>Kapazität (SP)</strong> = Netto-Tage × SP-Faktor (rollenspezifisch: Dev oder QA)</p>
+          <p><strong>Auslastung %</strong> = Geplante SP ÷ Σ Kapazität × 100</p>
+          <p style="font-size: 12px; color: var(--gray-600); margin-top: 12px;">
+            Hinweis: Krankheit ist nicht eingerechnet. Reale Kapazität kann durch ungeplante Ausfälle sinken.
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============= ADMIN VIEW ============= -->
+    <section class="view" id="view-admin" role="tabpanel">
+
+      <!-- Team-Settings -->
+      <div class="card">
+        <h2><span class="material-symbols-outlined">settings</span>Team-Settings</h2>
+        <div class="row">
+          <div class="field">
+            <label for="sprint-days">Sprintlänge (Werktage)</label>
+            <input type="number" id="sprint-days" min="1" max="60" step="1" value="10" />
+          </div>
+          <div class="field">
+            <label for="meeting-share">Meeting-Abzug (% pauschal)</label>
+            <input type="number" id="meeting-share" min="0" max="80" step="5" value="20" />
+            <span class="hint">Geht für jeden Person prozentual ab (Dailies, Refinement, Reviews etc.)</span>
+          </div>
+          <div class="field">
+            <label for="sp-factor-dev">SP-Faktor Dev</label>
+            <input type="number" id="sp-factor-dev" min="0.1" max="3" step="0.05" value="0.7" />
+            <span class="hint">SP, die ein Dev-Tag bei voller Konzentration „wert" ist</span>
+          </div>
+          <div class="field">
+            <label for="sp-factor-qa">SP-Faktor QA</label>
+            <input type="number" id="sp-factor-qa" min="0.1" max="3" step="0.05" value="0.7" />
+            <span class="hint">SP, die ein QA-Tag „wert" ist (oft kleiner als Dev)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglied hinzufügen -->
+      <div class="card">
+        <h2><span class="material-symbols-outlined">person_add</span>Teammitglied hinzufügen</h2>
+        <div class="row">
+          <div class="field field-grow">
+            <label for="new-name">Name</label>
+            <input type="text" id="new-name" placeholder="z. B. Anna Müller"
+                   onkeydown="if(event.key==='Enter') addMember()" />
+          </div>
+          <div class="field">
+            <label for="new-availability">Basis-Verfügbarkeit (%)</label>
+            <input type="number" id="new-availability" min="0" max="100" step="5" value="100" />
+            <span class="hint">100 % = Vollzeit, 50 % = Halbzeit etc.</span>
+          </div>
+          <div class="field">
+            <label for="new-role">Rolle</label>
+            <select id="new-role">
+              <option value="dev">Dev</option>
+              <option value="qa">QA</option>
+            </select>
+          </div>
+          <div class="field field-fixed">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" onclick="addMember()">
+              <span class="material-symbols-outlined">add</span>Hinzufügen
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitglieder-Verwaltung -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">groups</span>Team</h2>
+          <div class="actions-row">
+            <span style="font-size: 13px; color: var(--gray-800);" id="admin-count">0 Mitglieder</span>
+          </div>
+        </div>
+        <table id="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Rolle</th>
+              <th class="num">Verfügbarkeit (%)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="admin-body"></tbody>
+        </table>
+        <div class="empty" id="admin-empty">
+          <span class="material-symbols-outlined">person_off</span>
+          Noch keine Teammitglieder angelegt.
+        </div>
+      </div>
+
+      <!-- Daten verwalten -->
+      <div class="card">
+        <div class="toolbar">
+          <h2><span class="material-symbols-outlined">database</span>Daten verwalten</h2>
+          <div class="actions-row">
+            <button class="btn btn-secondary btn-sm" onclick="loadDemoData()">
+              <span class="material-symbols-outlined">science</span>Beispieldaten laden
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="exportData()">
+              <span class="material-symbols-outlined">download</span>Export (Backup)
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">
+              <span class="material-symbols-outlined">upload</span>Import
+            </button>
+            <input type="file" id="import-file" class="hidden" accept="application/json" onchange="importData(event)" />
+            <button class="btn btn-danger btn-sm" onclick="confirmReset()">
+              <span class="material-symbols-outlined">delete_forever</span>Alles löschen
+            </button>
+          </div>
+        </div>
+        <div style="font-size: 13px; color: var(--gray-800);">
+          „Beispieldaten" lädt ein 5er-Team mit gemischter Anwesenheit zum Ausprobieren.
+          Export speichert die Konfiguration als JSON. Import überschreibt alle aktuellen Daten.
+        </div>
+      </div>
+    </section>
+
+  </main>
 </div>
 
-<main>
-
-<!-- ============ TEAM ============ -->
-<section class="panel active" id="panel-team">
-  <div class="card">
-    <h2><span class="material-symbols-outlined">person_add</span>Teammitglied hinzufügen</h2>
-    <p class="hint">FTE = Stellenanteil in Prozent (100 % = Vollzeit). Die Kapazität wird aus verfügbaren Personentagen berechnet (1 PT = 1 Story Point).</p>
-    <div class="row">
-      <div class="field field-grow">
-        <label for="member-name">Name</label>
-        <input type="text" id="member-name" placeholder="z. B. Anna Müller" />
-      </div>
-      <div class="field">
-        <label for="member-fte">FTE in %</label>
-        <input type="number" id="member-fte" value="100" min="0" max="100" step="5" />
-      </div>
-      <div class="field">
-        <label for="member-role">Rolle</label>
-        <select id="member-role">
-          <option value="dev" selected>Dev</option>
-          <option value="qa">QA</option>
-        </select>
-      </div>
-      <div class="field field-fixed">
-        <label>&nbsp;</label>
-        <button class="btn btn-primary" onclick="addMember()"><span class="material-symbols-outlined">add</span>Hinzufügen</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="toolbar">
-      <h2><span class="material-symbols-outlined">groups</span>Team</h2>
-      <span id="team-summary" class="summary-pill"><span class="material-symbols-outlined">analytics</span><span id="team-summary-text"></span></span>
-    </div>
-    <table id="team-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Rolle</th>
-          <th class="num">FTE</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="team-body"></tbody>
-    </table>
-    <div class="empty" id="team-empty">
-      <span class="material-symbols-outlined">group_add</span>
-      Noch keine Teammitglieder erfasst.
-    </div>
-  </div>
-</section>
-
-<!-- ============ ABSENCES ============ -->
-<section class="panel" id="panel-absences">
-  <div class="card">
-    <h2><span class="material-symbols-outlined">event_busy</span>Abwesenheit erfassen</h2>
-    <p class="hint">Urlaub, Krankheit oder Fortbildung pro Person. Nur Werktage – ohne Wochenenden und Feiertage – werden gezählt.</p>
-    <div class="row">
-      <div class="field field-grow">
-        <label for="absence-member">Person</label>
-        <select id="absence-member"></select>
-      </div>
-      <div class="field">
-        <label for="absence-type">Art</label>
-        <select id="absence-type">
-          <option value="vacation">Urlaub</option>
-          <option value="sick">Krankheit</option>
-          <option value="training">Fortbildung</option>
-          <option value="other">Sonstiges</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="absence-from">Von</label>
-        <input type="date" id="absence-from" />
-      </div>
-      <div class="field">
-        <label for="absence-to">Bis</label>
-        <input type="date" id="absence-to" />
-      </div>
-      <div class="field">
-        <label for="absence-share">Umfang</label>
-        <select id="absence-share">
-          <option value="1" selected>Ganztag</option>
-          <option value="0.5">Halber Tag</option>
-        </select>
-      </div>
-      <div class="field field-fixed">
-        <label>&nbsp;</label>
-        <button class="btn btn-primary" onclick="addAbsence()"><span class="material-symbols-outlined">add</span>Hinzufügen</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2><span class="material-symbols-outlined">list_alt</span>Erfasste Abwesenheiten</h2>
-    <table id="absence-table">
-      <thead>
-        <tr>
-          <th>Person</th>
-          <th>Art</th>
-          <th>Von</th>
-          <th>Bis</th>
-          <th>Umfang</th>
-          <th class="num">Werktage</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="absence-body"></tbody>
-    </table>
-    <div class="empty" id="absence-empty">
-      <span class="material-symbols-outlined">beach_access</span>
-      Noch keine Abwesenheiten erfasst.
-    </div>
-  </div>
-</section>
-
-<!-- ============ HOLIDAYS ============ -->
-<section class="panel" id="panel-holidays">
-  <div class="card">
-    <h2><span class="material-symbols-outlined">map</span>Bundesland und Jahr</h2>
-    <p class="hint">Gesetzliche Feiertage werden automatisch berechnet, inklusive beweglicher Feste (Karfreitag, Ostermontag, Christi Himmelfahrt, Pfingstmontag, Fronleichnam, Buß- und Bettag).</p>
-    <div class="row">
-      <div class="field">
-        <label for="state">Bundesland</label>
-        <select id="state">
-          <option value="BW">Baden-Württemberg</option>
-          <option value="BY">Bayern</option>
-          <option value="BE">Berlin</option>
-          <option value="BB">Brandenburg</option>
-          <option value="HB">Bremen</option>
-          <option value="HH">Hamburg</option>
-          <option value="HE">Hessen</option>
-          <option value="MV">Mecklenburg-Vorpommern</option>
-          <option value="NI">Niedersachsen</option>
-          <option value="NW">Nordrhein-Westfalen</option>
-          <option value="RP">Rheinland-Pfalz</option>
-          <option value="SL">Saarland</option>
-          <option value="SN" selected>Sachsen</option>
-          <option value="ST">Sachsen-Anhalt</option>
-          <option value="SH">Schleswig-Holstein</option>
-          <option value="TH">Thüringen</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="holiday-year">Jahr</label>
-        <input type="number" id="holiday-year" min="2000" max="2100" />
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="toolbar">
-      <h2><span class="material-symbols-outlined">calendar_month</span>Feiertage</h2>
-      <span id="holiday-count" class="summary-pill"><span class="material-symbols-outlined">flag</span><span id="holiday-count-text"></span></span>
-    </div>
-    <div class="holiday-list" id="holiday-list"></div>
-  </div>
-</section>
-
-<!-- ============ CALCULATION ============ -->
-<section class="panel" id="panel-calc">
-  <div class="card">
-    <h2><span class="material-symbols-outlined">date_range</span>Planungszeitraum</h2>
-    <div class="row">
-      <div class="field">
-        <label for="calc-from">Von</label>
-        <input type="date" id="calc-from" />
-      </div>
-      <div class="field">
-        <label for="calc-to">Bis</label>
-        <input type="date" id="calc-to" />
-      </div>
-      <div class="field">
-        <label for="sprint-length">Sprintlänge (Werktage)</label>
-        <input type="number" id="sprint-length" value="10" min="1" max="60" step="1" />
-      </div>
-      <div class="field">
-        <label for="planned-sp">Geplante Story Points</label>
-        <input type="number" id="planned-sp" value="0" min="0" step="1" />
-      </div>
-      <div class="field">
-        <label for="meeting-share">Meetings / Overhead in %</label>
-        <input type="number" id="meeting-share" value="20" min="0" max="100" step="5" />
-      </div>
-      <div class="field">
-        <label for="pt-per-sp">PT pro Story Point</label>
-        <input type="number" id="pt-per-sp" value="1" min="0.1" max="20" step="0.1" />
-      </div>
-    </div>
-  </div>
-
-  <div class="toolbar">
-    <h2><span class="material-symbols-outlined">tune</span>Rollenfilter</h2>
-    <div class="actions-row">
-      <div class="toggle-group" id="role-filter-group">
-        <button class="toggle-btn active" data-role-filter="all" onclick="setRoleFilter('all')">Alle</button>
-        <button class="toggle-btn" data-role-filter="dev" onclick="setRoleFilter('dev')">Dev</button>
-        <button class="toggle-btn" data-role-filter="qa" onclick="setRoleFilter('qa')">QA</button>
-      </div>
-      <span id="filter-summary" class="summary-pill"><span class="material-symbols-outlined">filter_alt</span><span id="filter-summary-text"></span></span>
-    </div>
-  </div>
-
-  <div class="stat-grid" id="kpi-grid"></div>
-
-  <div class="card">
-    <h2><span class="material-symbols-outlined">team_dashboard</span>Pro Person</h2>
-    <table id="result-table">
-      <thead>
-        <tr>
-          <th>Person</th>
-          <th class="num">Werktage</th>
-          <th class="num">FTE-bereinigt</th>
-          <th class="num">Abwesenheit</th>
-          <th class="num">Verfügbar nach Meetings (PT)</th>
-          <th class="num">Kapazität (SP)</th>
-        </tr>
-      </thead>
-      <tbody id="result-body"></tbody>
-      <tfoot>
-        <tr id="result-total"></tr>
-      </tfoot>
-    </table>
-    <div class="empty" id="result-empty">
-      <span class="material-symbols-outlined">analytics</span>
-      Bitte Team und Zeitraum festlegen.
-    </div>
-  </div>
-
-  <details>
-    <summary>So wird gerechnet</summary>
-    <p>Werktage im Zeitraum (ohne Wochenenden und Feiertage) × FTE‑Anteil − Abwesenheitstage = verfügbare Personentage (PT). Davon wird der Meeting-/Overhead-Anteil prozentual abgezogen. Die Umrechnung PT → Story Points ist pro Team über "PT pro Story Point" konfigurierbar. Auslastung % = geplante Story Points ÷ Gesamtkapazität in SP × 100.</p>
-  </details>
-
-  <div class="card">
-    <div class="toolbar">
-      <h2><span class="material-symbols-outlined">database</span>Daten verwalten</h2>
-      <div class="actions-row">
-        <button class="btn btn-secondary" onclick="exportData()"><span class="material-symbols-outlined">download</span>Export</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()"><span class="material-symbols-outlined">upload</span>Import</button>
-        <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importData(event)" />
-        <button class="btn btn-secondary" onclick="loadDemo()"><span class="material-symbols-outlined">auto_awesome</span>Demo laden</button>
-        <button class="btn btn-secondary" onclick="resetAll()" style="color:var(--p-red); border-color:rgba(255,84,68,0.3)"><span class="material-symbols-outlined">restart_alt</span>Zurücksetzen</button>
-      </div>
-    </div>
-    <p class="footnote">Daten werden automatisch im Browser gespeichert (localStorage), getrennt pro Team-Kürzel. Export als JSON möglich.</p>
-  </div>
-
-  <div class="card">
-    <div class="toolbar">
-      <h2><span class="material-symbols-outlined">history</span>Historie</h2>
-      <div class="actions-row">
-        <button class="btn btn-secondary" onclick="saveSnapshot()"><span class="material-symbols-outlined">save</span>Stand speichern</button>
-        <button class="btn btn-secondary" onclick="clearHistory()"><span class="material-symbols-outlined">delete_sweep</span>Historie leeren</button>
-      </div>
-    </div>
-    <table class="tiny-table" id="history-table">
-      <thead>
-        <tr>
-          <th>Zeitpunkt</th>
-          <th>Filter</th>
-          <th>Zeitraum</th>
-          <th class="num">Kapazität (SP)</th>
-          <th class="num">Geplante SP</th>
-          <th class="num">Auslastung</th>
-        </tr>
-      </thead>
-      <tbody id="history-body"></tbody>
-    </table>
-    <div class="empty" id="history-empty">
-      <span class="material-symbols-outlined">history</span>
-      Noch keine Historie gespeichert.
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer class="app-footer">
-  <span>procilon</span> · Kapazitätsplaner Entwicklungsteam · Designsystem nach Procilon Styleguide Februar 2026
-</footer>
-
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
 // State & Persistence
 // ============================================================
-let state = {
-  teamId: '',
-  members: [],
-  absences: [],
-  roleFilter: 'all',
-  history: [],
-  state: 'SN',
-  year: new Date().getFullYear(),
-  calcFrom: '',
-  calcTo: '',
-  sprintLength: 10,
+const STORAGE_KEY = 'procilon_kapazitaetsplaner_v3';
+
+const defaultState = () => ({
+  // Stammdaten (Admin)
+  members: [],          // { id, name, baseAvailability, role: 'dev'|'qa' }
+  sprintDays: 10,
+  meetingShare: 20,     // global, %
+  spFactorDev: 0.7,
+  spFactorQa: 0.7,
+  // Sprint (Planning)
+  attendance: {},       // memberId -> Tage anwesend (Default: sprintDays)
   plannedSp: 0,
-  meetingShare: 20,
-  ptPerSp: 1,
-};
-const STORAGE_KEY_PREFIX = 'kapazitaetsplaner_v1_';
-const STORAGE_TEAM_INSTANCE_KEY = 'kapazitaetsplaner_team_instance_v1';
+});
 
-function storageKeyFor(teamId) {
-  return `${STORAGE_KEY_PREFIX}${teamId || 'default'}`;
-}
-function storageKey() {
-  return storageKeyFor(state.teamId);
+let state = defaultState();
+
+// Locale-tolerantes Parsing
+function toNum(v, fallback = NaN) {
+  if (v === null || v === undefined || v === '') return fallback;
+  const n = parseFloat(String(v).replace(',', '.').trim());
+  return isNaN(n) ? fallback : n;
 }
 
-function defaultState() {
-  // Beim Team-Wechsel müssen wir komplett zurücksetzen,
-  // sonst würden alte Daten "mitgenommen".
-  return {
-    teamId: state.teamId,
-    members: [],
-    absences: [],
-    roleFilter: 'all',
-    history: [],
-    state: 'SN',
-    year: new Date().getFullYear(),
-    calcFrom: '',
-    calcTo: '',
-    sprintLength: 10,
-    plannedSp: 0,
-    meetingShare: 20,
-    ptPerSp: 1,
-  };
-}
-
+let storageWarned = false;
 function save() {
-  localStorage.setItem(storageKey(), JSON.stringify(state));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    if (!storageWarned) {
+      storageWarned = true;
+      showToast('Hinweis: localStorage nicht verfügbar – Daten bleiben nur in dieser Sitzung.');
+    }
+  }
 }
 function load() {
-  const raw = localStorage.getItem(storageKey());
-  state = defaultState();
-  if (raw) {
-    try { state = Object.assign(state, JSON.parse(raw)); } catch(e) { console.warn(e); }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      state = Object.assign(defaultState(), JSON.parse(raw));
+    } else {
+      // Erster Start: Beispieldaten laden, damit man sofort etwas sieht
+      state = demoState();
+      save();
+    }
+  } catch (e) {
+    console.warn('Konnte gespeicherten State nicht lesen', e);
   }
+}
+
+function demoState() {
+  return {
+    members: [
+      { id: 'm1', name: 'Anna Müller',     baseAvailability: 100, role: 'dev' },
+      { id: 'm2', name: 'Bob Schmidt',     baseAvailability:  80, role: 'dev' },
+      { id: 'm3', name: 'Carla Schneider', baseAvailability: 100, role: 'dev' },
+      { id: 'm4', name: 'Dan Becker',      baseAvailability:  60, role: 'dev' },
+      { id: 'm5', name: 'Eva Lange',       baseAvailability: 100, role: 'qa'  },
+    ],
+    sprintDays: 10,
+    meetingShare: 20,
+    spFactorDev: 0.7,
+    spFactorQa: 0.5,
+    attendance: { m1: 8, m3: 7, m5: 9 },
+    plannedSp: 22,
+  };
 }
 function uid() { return Math.random().toString(36).slice(2, 10); }
 
-function initTeamId() {
-  const input = document.getElementById('team-id');
-  let saved = localStorage.getItem(STORAGE_TEAM_INSTANCE_KEY);
-  if (!saved) {
-    saved = `team-${uid()}`;
-    localStorage.setItem(STORAGE_TEAM_INSTANCE_KEY, saved);
-  }
-  state.teamId = saved;
-  if (input) input.value = saved;
+// ============================================================
+// View Toggle
+// ============================================================
+function setView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  document.querySelector(`.view-toggle button[data-view="${name}"]`).classList.add('active');
 }
+document.querySelectorAll('.view-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
+});
 
-// ============================================================
-// Header date
-// ============================================================
-(function() {
+// Header Date
+(function () {
   const today = new Date();
   const fmt = today.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   document.getElementById('header-date').textContent = fmt;
 })();
 
 // ============================================================
-// Tabs
+// Berechnungslogik
 // ============================================================
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
-    if (btn.dataset.panel === 'calc') renderCalc();
+function getAttendance(member) {
+  // Default: alle Sprinttage anwesend
+  const stored = state.attendance[member.id];
+  if (stored === undefined || stored === null || stored === '') return state.sprintDays;
+  return Math.max(0, Math.min(state.sprintDays, toNum(stored, state.sprintDays)));
+}
+function netDaysFor(member) {
+  const present = getAttendance(member);
+  const meetingFactor = 1 - (Math.max(0, Math.min(80, toNum(state.meetingShare, 0))) / 100);
+  return Math.max(0, present * (member.baseAvailability / 100) * meetingFactor);
+}
+function spFactorFor(member) {
+  return member.role === 'qa'
+    ? Math.max(0, toNum(state.spFactorQa, 0.7))
+    : Math.max(0, toNum(state.spFactorDev, 0.7));
+}
+function capacityFor(member) {
+  return netDaysFor(member) * spFactorFor(member);
+}
+function totals() {
+  return {
+    capacity: state.members.reduce((s, m) => s + capacityFor(m), 0),
+    planned: Math.max(0, toNum(state.plannedSp) || 0),
+    members: state.members.length,
+  };
+}
+function totalsByRole(role) {
+  const members = state.members.filter(m => m.role === role);
+  return {
+    members,
+    capacity: members.reduce((s, m) => s + capacityFor(m), 0),
+  };
+}
+
+// ============================================================
+// Render: Planning View
+// ============================================================
+function renderPlanning() {
+  const body = document.getElementById('planning-body');
+  const tot = document.getElementById('planning-total');
+  const empty = document.getElementById('planning-empty');
+
+  body.innerHTML = '';
+  tot.innerHTML = '';
+  document.getElementById('planning-sprint-length').textContent = state.sprintDays;
+
+  if (!state.members.length) {
+    empty.classList.add('show');
+    document.getElementById('planning-table').style.display = 'none';
+  } else {
+    empty.classList.remove('show');
+    document.getElementById('planning-table').style.display = '';
+
+    const sorted = [...state.members].sort((a, b) =>
+      a.role.localeCompare(b.role) || a.name.localeCompare(b.name, 'de')
+    );
+
+    let totalNet = 0, totalCap = 0;
+    sorted.forEach(m => {
+      const net = netDaysFor(m);
+      const cap = capacityFor(m);
+      const present = getAttendance(m);
+      totalNet += net; totalCap += cap;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(m.name)}</td>
+        <td><span class="chip chip-${m.role}">${m.role.toUpperCase()}</span></td>
+        <td class="num">${m.baseAvailability} %</td>
+        <td class="num">
+          <span class="attendance-cell">
+            <input type="number" class="compact" min="0" max="${state.sprintDays}" step="0.5"
+                   value="${present}"
+                   onchange="updateAttendance('${m.id}', this.value)" />
+            <span class="max">/ ${state.sprintDays}</span>
+          </span>
+        </td>
+        <td class="num">${net.toFixed(1)}</td>
+        <td class="num">${cap.toFixed(1)}</td>
+      `;
+      body.appendChild(tr);
+    });
+
+    tot.innerHTML = `
+      <td>Summe</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="num">${totalNet.toFixed(1)}</td>
+      <td class="num">${totalCap.toFixed(1)}</td>
+    `;
+  }
+
+  renderUsage();
+  renderSettingsSummary();
+}
+
+function renderUsage() {
+  const t = totals();
+  const dev = totalsByRole('dev');
+  const qa = totalsByRole('qa');
+
+  const pct = t.capacity > 0 ? (t.planned / t.capacity) * 100 : 0;
+  const pctRound = Math.round(pct);
+
+  document.getElementById('usage-pct').textContent = `${pctRound} %`;
+  document.getElementById('usage-planned').textContent = formatNum(t.planned);
+  document.getElementById('usage-capacity').textContent = formatNum(t.capacity);
+  document.getElementById('usage-members').textContent = t.members;
+
+  const bar = document.getElementById('usage-bar');
+  bar.style.width = Math.min(pct, 100) + '%';
+  bar.classList.toggle('over', pct > 100);
+
+  // Status & Delta
+  const delta = t.planned - t.capacity;
+  const deltaEl = document.getElementById('usage-delta');
+  if (t.capacity === 0) deltaEl.textContent = 'Keine Kapazität verfügbar';
+  else if (delta > 0) deltaEl.textContent = `Überplant: +${formatNum(delta)} SP über Kapazität`;
+  else if (delta < 0) deltaEl.textContent = `Reserve: ${formatNum(-delta)} SP frei`;
+  else deltaEl.textContent = 'Punktgenau';
+
+  const lbl = document.getElementById('usage-status-label');
+  if (t.capacity === 0) lbl.textContent = '—';
+  else if (pct > 100) lbl.textContent = 'überplant';
+  else if (pct > 90) lbl.textContent = 'voll';
+  else if (pct > 70) lbl.textContent = 'gut ausgelastet';
+  else if (pct > 0)  lbl.textContent = 'Luft nach oben';
+  else lbl.textContent = 'frei';
+
+  // Sub-Info pro Rolle
+  document.getElementById('dev-capacity').textContent = formatNum(dev.capacity);
+  document.getElementById('qa-capacity').textContent = formatNum(qa.capacity);
+  document.getElementById('dev-headcount').textContent =
+    `${dev.members.length} ${dev.members.length === 1 ? 'Person' : 'Pers.'}`;
+  document.getElementById('qa-headcount').textContent =
+    `${qa.members.length} ${qa.members.length === 1 ? 'Person' : 'Pers.'}`;
+}
+
+function renderSettingsSummary() {
+  document.getElementById('settings-summary').textContent =
+    `${state.sprintDays} WT · ${state.meetingShare} % Meetings · SP Dev ${state.spFactorDev} · QA ${state.spFactorQa}`;
+}
+
+// ============================================================
+// Render: Admin View
+// ============================================================
+function renderAdmin() {
+  const body = document.getElementById('admin-body');
+  const empty = document.getElementById('admin-empty');
+  const count = document.getElementById('admin-count');
+
+  body.innerHTML = '';
+  count.textContent = `${state.members.length} ${state.members.length === 1 ? 'Mitglied' : 'Mitglieder'}`;
+
+  if (!state.members.length) {
+    empty.classList.add('show');
+    document.getElementById('admin-table').style.display = 'none';
+    return;
+  }
+  empty.classList.remove('show');
+  document.getElementById('admin-table').style.display = '';
+
+  const sorted = [...state.members].sort((a, b) =>
+    a.role.localeCompare(b.role) || a.name.localeCompare(b.name, 'de')
+  );
+
+  sorted.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${escapeHtml(m.name)}" onchange="updateMember('${m.id}', 'name', this.value)" /></td>
+      <td>
+        <select onchange="updateMember('${m.id}', 'role', this.value)">
+          <option value="dev" ${m.role === 'dev' ? 'selected' : ''}>Dev</option>
+          <option value="qa"  ${m.role === 'qa'  ? 'selected' : ''}>QA</option>
+        </select>
+      </td>
+      <td class="num">
+        <input type="number" class="compact" min="0" max="100" step="5"
+               value="${m.baseAvailability}"
+               onchange="updateMember('${m.id}', 'baseAvailability', this.value)" />
+      </td>
+      <td style="text-align: right;">
+        <button class="btn btn-ghost btn-sm" style="color: var(--p-red);" onclick="removeMember('${m.id}')">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+// ============================================================
+// Mutations
+// ============================================================
+function addMember() {
+  const name = document.getElementById('new-name').value.trim();
+  const av = toNum(document.getElementById('new-availability').value);
+  const role = document.getElementById('new-role').value;
+  if (!name) { showToast('Bitte einen Namen eingeben.'); return; }
+  if (isNaN(av) || av < 0 || av > 100) { showToast('Verfügbarkeit muss zwischen 0 und 100 liegen.'); return; }
+  const id = uid();
+  state.members.push({ id, name, baseAvailability: av, role });
+  // Default-Anwesenheit = volle Sprintlänge
+  state.attendance[id] = state.sprintDays;
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-availability').value = 100;
+  document.getElementById('new-role').value = 'dev';
+  save(); renderAdmin(); renderPlanning();
+  showToast(`${name} hinzugefügt.`);
+}
+
+function removeMember(id) {
+  const m = state.members.find(x => x.id === id);
+  if (!m) return;
+  if (!confirm(`„${m.name}" wirklich entfernen?`)) return;
+  state.members = state.members.filter(x => x.id !== id);
+  delete state.attendance[id];
+  save(); renderAdmin(); renderPlanning();
+  showToast(`${m.name} entfernt.`);
+}
+
+function updateMember(id, field, value) {
+  const m = state.members.find(x => x.id === id);
+  if (!m) return;
+  if (field === 'baseAvailability') {
+    const n = toNum(value);
+    m.baseAvailability = isNaN(n) ? m.baseAvailability : Math.max(0, Math.min(100, n));
+  } else if (field === 'name') {
+    m.name = String(value).trim() || m.name;
+  } else if (field === 'role') {
+    m.role = (value === 'qa') ? 'qa' : 'dev';
+  }
+  save(); renderAdmin(); renderPlanning();
+}
+
+function updateAttendance(id, value) {
+  const n = Math.max(0, Math.min(state.sprintDays, toNum(value, state.sprintDays)));
+  state.attendance[id] = n;
+  save(); renderPlanning();
+}
+
+function resetSprint() {
+  if (!confirm('Anwesenheit (alle voll da) und geplante SP auf Default zurücksetzen? Mitglieder und Settings bleiben.')) return;
+  state.attendance = {};
+  state.plannedSp = 0;
+  document.getElementById('planned-sp').value = 0;
+  save(); renderPlanning();
+  showToast('Sprint zurückgesetzt.');
+}
+
+function confirmReset() {
+  if (!confirm('Komplett alles löschen? Mitglieder, Settings und Sprint-Daten gehen verloren.')) return;
+  state = defaultState();
+  save();
+  syncSettingsInputs();
+  renderAdmin(); renderPlanning();
+  showToast('Alle Daten gelöscht.');
+}
+
+function loadDemoData() {
+  if (state.members.length > 0) {
+    if (!confirm('Aktuelle Daten werden durch das Beispiel-Team überschrieben. Fortfahren?')) return;
+  }
+  state = demoState();
+  save();
+  syncSettingsInputs();
+  renderAdmin(); renderPlanning();
+  showToast('Beispieldaten geladen – siehe Planning-Ansicht.');
+  setView('planning');
+}
+
+// ============================================================
+// Settings sync
+// ============================================================
+function syncSettingsInputs() {
+  document.getElementById('sprint-days').value = state.sprintDays;
+  document.getElementById('meeting-share').value = state.meetingShare;
+  document.getElementById('sp-factor-dev').value = state.spFactorDev;
+  document.getElementById('sp-factor-qa').value = state.spFactorQa;
+  document.getElementById('planned-sp').value = state.plannedSp;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  load();
+  syncSettingsInputs();
+  renderAdmin();
+  renderPlanning();
+
+  document.getElementById('sprint-days').addEventListener('input', e => {
+    const n = Math.max(1, Math.min(60, parseInt(e.target.value) || 1));
+    state.sprintDays = n;
+    // Anwesenheits-Werte clampen, falls jemand mehr Tage hatte als jetzt
+    Object.keys(state.attendance).forEach(id => {
+      if (state.attendance[id] > n) state.attendance[id] = n;
+    });
+    save(); renderPlanning();
+  });
+  document.getElementById('meeting-share').addEventListener('input', e => {
+    const n = Math.max(0, Math.min(80, toNum(e.target.value) || 0));
+    state.meetingShare = n;
+    save(); renderPlanning();
+  });
+  document.getElementById('sp-factor-dev').addEventListener('input', e => {
+    state.spFactorDev = Math.max(0.1, Math.min(3, toNum(e.target.value) || 0.1));
+    save(); renderPlanning();
+  });
+  document.getElementById('sp-factor-qa').addEventListener('input', e => {
+    state.spFactorQa = Math.max(0.1, Math.min(3, toNum(e.target.value) || 0.1));
+    save(); renderPlanning();
+  });
+  document.getElementById('planned-sp').addEventListener('input', e => {
+    state.plannedSp = Math.max(0, toNum(e.target.value) || 0);
+    save(); renderUsage();
   });
 });
 
 // ============================================================
-// Easter & German holidays
+// Export / Import
 // ============================================================
-function easterDate(year) {
-  const a = year % 19;
-  const b = Math.floor(year / 100);
-  const c = year % 100;
-  const d = Math.floor(b / 4);
-  const e = b % 4;
-  const f = Math.floor((b + 8) / 25);
-  const g = Math.floor((b - f + 1) / 3);
-  const h = (19 * a + b - d - g + 15) % 30;
-  const i = Math.floor(c / 4);
-  const k = c % 4;
-  const l = (32 + 2 * e + 2 * i - h - k) % 7;
-  const m = Math.floor((a + 11 * h + 22 * l) / 451);
-  const month = Math.floor((h + l - 7 * m + 114) / 31);
-  const day = ((h + l - 7 * m + 114) % 31) + 1;
-  return new Date(year, month - 1, day);
-}
-function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
-function fmtDate(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-function fmtGerman(iso) {
-  if (!iso) return '';
-  const [y, m, d] = iso.split('-');
-  return `${d}.${m}.${y}`;
-}
-function bussUndBettag(year) {
-  const d = new Date(year, 10, 22);
-  while (d.getDay() !== 3) d.setDate(d.getDate() - 1);
-  return d;
-}
-function holidaysFor(year, st) {
-  const easter = easterDate(year);
-  const list = [];
-  const add = (date, name) => list.push({ date: fmtDate(date), name });
-  add(new Date(year, 0, 1), 'Neujahr');
-  add(addDays(easter, -2), 'Karfreitag');
-  add(addDays(easter, 1), 'Ostermontag');
-  add(new Date(year, 4, 1), 'Tag der Arbeit');
-  add(addDays(easter, 39), 'Christi Himmelfahrt');
-  add(addDays(easter, 50), 'Pfingstmontag');
-  add(new Date(year, 9, 3), 'Tag der Deutschen Einheit');
-  add(new Date(year, 11, 25), '1. Weihnachtstag');
-  add(new Date(year, 11, 26), '2. Weihnachtstag');
-  if (['BW','BY','ST'].includes(st)) add(new Date(year, 0, 6), 'Heilige Drei Könige');
-  if (['BE','MV'].includes(st)) add(new Date(year, 2, 8), 'Internationaler Frauentag');
-  if (['BW','BY','HE','NW','RP','SL'].includes(st)) add(addDays(easter, 60), 'Fronleichnam');
-  if (['SL'].includes(st)) add(new Date(year, 7, 15), 'Mariä Himmelfahrt');
-  if (['TH'].includes(st)) add(new Date(year, 8, 20), 'Weltkindertag');
-  if (['BB','HB','HH','MV','NI','SN','ST','SH','TH'].includes(st)) add(new Date(year, 9, 31), 'Reformationstag');
-  if (['BW','BY','NW','RP','SL'].includes(st)) add(new Date(year, 10, 1), 'Allerheiligen');
-  if (st === 'SN') add(bussUndBettag(year), 'Buß- und Bettag');
-  list.sort((a,b) => a.date.localeCompare(b.date));
-  return list;
-}
-function holidaysInRange(fromIso, toIso, st) {
-  const fromY = parseInt(fromIso.slice(0,4));
-  const toY = parseInt(toIso.slice(0,4));
-  const set = new Set();
-  for (let y = fromY; y <= toY; y++) {
-    holidaysFor(y, st).forEach(h => {
-      if (h.date >= fromIso && h.date <= toIso) set.add(h.date);
-    });
-  }
-  return set;
-}
-function workdaysBetween(fromIso, toIso, holidaySet) {
-  if (!fromIso || !toIso || fromIso > toIso) return 0;
-  const start = new Date(fromIso + 'T00:00:00');
-  const end = new Date(toIso + 'T00:00:00');
-  let count = 0;
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const wd = d.getDay();
-    if (wd === 0 || wd === 6) continue;
-    if (holidaySet.has(fmtDate(d))) continue;
-    count++;
-  }
-  return count;
+function exportData() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ts = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `kapazitaetsplaner_${ts}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup exportiert.');
 }
 
-// ============================================================
-// Team
-// ============================================================
-function addMember() {
-  const name = document.getElementById('member-name').value.trim();
-  const fte = parseFloat(document.getElementById('member-fte').value);
-  const role = document.getElementById('member-role').value;
-  if (!name) { alert('Bitte einen Namen eingeben.'); return; }
-  if (isNaN(fte) || fte < 0 || fte > 100) { alert('FTE muss zwischen 0 und 100 liegen.'); return; }
-  state.members.push({ id: uid(), name, fte, role: role || 'dev' });
-  document.getElementById('member-name').value = '';
-  save(); renderTeam(); renderAbsenceMembers();
-}
-function removeMember(id) {
-  if (!confirm('Mitglied entfernen? Die zugehörigen Abwesenheiten werden ebenfalls gelöscht.')) return;
-  state.members = state.members.filter(m => m.id !== id);
-  state.absences = state.absences.filter(a => a.memberId !== id);
-  save(); renderTeam(); renderAbsenceMembers(); renderAbsences();
-}
-function updateMember(id, field, value) {
-  const m = state.members.find(x => x.id === id);
-  if (!m) return;
-  if (field === 'name') m.name = value.trim() || m.name;
-  else if (field === 'role') m.role = value === 'qa' ? 'qa' : 'dev';
-  else m[field] = parseFloat(value) || 0;
-  save(); renderTeamSummary(); renderAbsenceMembers();
-}
-function renderTeam() {
-  const body = document.getElementById('team-body');
-  const empty = document.getElementById('team-empty');
-  body.innerHTML = '';
-  if (state.members.length === 0) {
-    empty.style.display = 'flex';
-    document.getElementById('team-table').style.display = 'none';
-  } else {
-    empty.style.display = 'none';
-    document.getElementById('team-table').style.display = '';
-    state.members.forEach(m => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input class="inline-edit" type="text" value="${escapeHtml(m.name)}" onchange="updateMember('${m.id}','name',this.value)" /></td>
-        <td>
-          <select class="inline-edit" onchange="updateMember('${m.id}','role',this.value)">
-            <option value="dev" ${m.role === 'dev' ? 'selected' : ''}>Dev</option>
-            <option value="qa" ${m.role === 'qa' ? 'selected' : ''}>QA</option>
-          </select>
-        </td>
-        <td class="num"><input class="inline-edit inline-edit-num" type="number" value="${m.fte}" min="0" max="100" step="5" onchange="updateMember('${m.id}','fte',this.value)" /> %</td>
-        <td><button class="btn-icon danger" onclick="removeMember('${m.id}')" title="Entfernen"><span class="material-symbols-outlined">delete</span></button></td>
-      `;
-      body.appendChild(tr);
-    });
-  }
-  renderTeamSummary();
-}
-function renderTeamSummary() {
-  const totalFte = state.members.reduce((s,m) => s + (m.fte/100), 0);
-  const devCount = state.members.filter(m => (m.role || 'dev') === 'dev').length;
-  const qaCount = state.members.filter(m => (m.role || 'dev') === 'qa').length;
-  document.getElementById('team-summary-text').textContent =
-    `${state.members.length} Personen · ${totalFte.toFixed(2)} FTE · Dev ${devCount} · QA ${qaCount}`;
-}
-
-// ============================================================
-// Absences
-// ============================================================
-function renderAbsenceMembers() {
-  const sel = document.getElementById('absence-member');
-  sel.innerHTML = '';
-  if (state.members.length === 0) {
-    sel.innerHTML = '<option>Bitte zuerst ein Teammitglied anlegen</option>';
-    sel.disabled = true;
-  } else {
-    sel.disabled = false;
-    state.members.forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m.id;
-      opt.textContent = m.name;
-      sel.appendChild(opt);
-    });
-  }
-}
-function addAbsence() {
-  const memberId = document.getElementById('absence-member').value;
-  const type = document.getElementById('absence-type').value;
-  const from = document.getElementById('absence-from').value;
-  const to = document.getElementById('absence-to').value;
-  const share = parseFloat(document.getElementById('absence-share').value) || 1;
-  if (!memberId || state.members.length === 0) { alert('Bitte zuerst ein Teammitglied anlegen.'); return; }
-  if (!from || !to) { alert('Bitte Von- und Bis-Datum angeben.'); return; }
-  if (from > to) { alert('Das Bis-Datum muss nach dem Von-Datum liegen.'); return; }
-  state.absences.push({ id: uid(), memberId, type, from, to, share: share === 0.5 ? 0.5 : 1 });
-  save(); renderAbsences();
-}
-function removeAbsence(id) {
-  state.absences = state.absences.filter(a => a.id !== id);
-  save(); renderAbsences();
-}
-function typeLabel(t) {
-  return { vacation:'Urlaub', sick:'Krankheit', training:'Fortbildung', other:'Sonstiges' }[t] || t;
-}
-function typeBadge(t) {
-  return { vacation:'badge-vacation', sick:'badge-sick', training:'badge-training', other:'badge-other' }[t] || 'badge-other';
-}
-function typeIcon(t) {
-  return { vacation:'beach_access', sick:'sick', training:'school', other:'event_note' }[t] || 'event_note';
-}
-function renderAbsences() {
-  const body = document.getElementById('absence-body');
-  const empty = document.getElementById('absence-empty');
-  body.innerHTML = '';
-  if (state.absences.length === 0) {
-    empty.style.display = 'flex';
-    document.getElementById('absence-table').style.display = 'none';
-    return;
-  }
-  empty.style.display = 'none';
-  document.getElementById('absence-table').style.display = '';
-  const holSet = holidaysInRange('2000-01-01', '2100-12-31', state.state);
-  const sorted = state.absences.slice().sort((a,b) => a.from.localeCompare(b.from));
-  sorted.forEach(a => {
-    const m = state.members.find(x => x.id === a.memberId);
-    const share = a.share === 0.5 ? 0.5 : 1;
-    const days = workdaysBetween(a.from, a.to, holSet) * share;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${m ? escapeHtml(m.name) : '<i>unbekannt</i>'}</td>
-      <td><span class="badge ${typeBadge(a.type)}"><span class="material-symbols-outlined">${typeIcon(a.type)}</span>${typeLabel(a.type)}</span></td>
-      <td>${fmtGerman(a.from)}</td>
-      <td>${fmtGerman(a.to)}</td>
-      <td>${share === 0.5 ? 'Halbtag' : 'Ganztag'}</td>
-      <td class="num">${days}</td>
-      <td><button class="btn-icon danger" onclick="removeAbsence('${a.id}')" title="Entfernen"><span class="material-symbols-outlined">delete</span></button></td>
-    `;
-    body.appendChild(tr);
-  });
-}
-
-// ============================================================
-// Holidays UI
-// ============================================================
-function renderHolidays() {
-  const list = document.getElementById('holiday-list');
-  const year = parseInt(document.getElementById('holiday-year').value);
-  const st = document.getElementById('state').value;
-  state.state = st; state.year = year; save();
-  const hs = holidaysFor(year, st);
-  list.innerHTML = '';
-  hs.forEach(h => {
-    const chip = document.createElement('span');
-    chip.className = 'holiday-chip';
-    chip.innerHTML = `<span class="material-symbols-outlined">flag</span>${fmtGerman(h.date)} · ${h.name}`;
-    list.appendChild(chip);
-  });
-  document.getElementById('holiday-count-text').textContent = `${hs.length} Tage in ${year}`;
-  renderAbsences();
-}
-
-// ============================================================
-// Calculation
-// ============================================================
-function renderCalc() {
-  const from = document.getElementById('calc-from').value;
-  const to = document.getElementById('calc-to').value;
-  state.calcFrom = from; state.calcTo = to;
-  state.sprintLength = parseFloat(document.getElementById('sprint-length').value) || 10;
-  state.plannedSp = parseFloat(document.getElementById('planned-sp').value) || 0;
-  state.meetingShare = parseFloat(document.getElementById('meeting-share').value) || 0;
-  state.ptPerSp = parseFloat(document.getElementById('pt-per-sp').value) || 1;
-  if (state.meetingShare < 0) state.meetingShare = 0;
-  if (state.meetingShare > 100) state.meetingShare = 100;
-  if (state.ptPerSp <= 0) state.ptPerSp = 1;
-  save();
-
-  const body = document.getElementById('result-body');
-  const totalRow = document.getElementById('result-total');
-  const empty = document.getElementById('result-empty');
-  const kpiGrid = document.getElementById('kpi-grid');
-  body.innerHTML = '';
-  totalRow.innerHTML = '';
-  kpiGrid.innerHTML = '';
-
-  if (!from || !to || state.members.length === 0) {
-    empty.style.display = 'flex';
-    document.getElementById('result-table').style.display = 'none';
-    return;
-  }
-  if (from > to) {
-    empty.innerHTML = '<span class="material-symbols-outlined">error</span>Das Bis-Datum muss nach dem Von-Datum liegen.';
-    empty.style.display = 'flex';
-    document.getElementById('result-table').style.display = 'none';
-    return;
-  }
-  empty.style.display = 'none';
-  document.getElementById('result-table').style.display = '';
-
-  const holSet = holidaysInRange(from, to, state.state);
-  const totalWorkdays = workdaysBetween(from, to, holSet);
-  const filteredMembers = state.members.filter(m => {
-    const role = m.role || 'dev';
-    return state.roleFilter === 'all' ? true : role === state.roleFilter;
-  });
-  document.getElementById('filter-summary-text').textContent =
-    state.roleFilter === 'all'
-      ? `Filter: Alle Rollen (${filteredMembers.length} Personen)`
-      : `Filter: ${state.roleFilter.toUpperCase()} (${filteredMembers.length} Personen)`;
-
-  let totalAvailable = 0;
-  let totalFocusAvailable = 0;
-  let totalCapacitySp = 0;
-  let totalAbsenceDays = 0;
-  let totalFteDays = 0;
-
-  if (filteredMembers.length === 0) {
-    empty.innerHTML = '<span class="material-symbols-outlined">filter_alt_off</span>Keine Personen im gewählten Rollenfilter.';
-    empty.style.display = 'flex';
-    document.getElementById('result-table').style.display = 'none';
-    updateRoleFilterToggle();
-    return;
-  } else {
-    empty.innerHTML = '<span class="material-symbols-outlined">analytics</span>Bitte Team und Zeitraum festlegen.';
-  }
-
-  filteredMembers.forEach(m => {
-    const fteFactor = (m.fte || 0) / 100;
-    const fteAdjusted = totalWorkdays * fteFactor;
-    let absenceDays = 0;
-    state.absences.filter(a => a.memberId === m.id).forEach(a => {
-      const from2 = a.from < from ? from : a.from;
-      const to2 = a.to > to ? to : a.to;
-      if (from2 > to2) return;
-      const share = a.share === 0.5 ? 0.5 : 1;
-      absenceDays += workdaysBetween(from2, to2, holSet) * share * fteFactor;
-    });
-    const available = Math.max(0, fteAdjusted - absenceDays);
-    const focusAvailable = available * (1 - state.meetingShare / 100);
-    const sp = focusAvailable / state.ptPerSp;
-    totalAvailable += available;
-    totalFocusAvailable += focusAvailable;
-    totalCapacitySp += sp;
-    totalAbsenceDays += absenceDays;
-    totalFteDays += fteAdjusted;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${escapeHtml(m.name)}</td>
-      <td class="num">${totalWorkdays}</td>
-      <td class="num">${fteAdjusted.toFixed(1)}</td>
-      <td class="num">−${absenceDays.toFixed(1)}</td>
-      <td class="num">${focusAvailable.toFixed(1)}</td>
-      <td class="num"><strong>${sp.toFixed(1)}</strong></td>
-    `;
-    body.appendChild(tr);
-  });
-
-  totalRow.innerHTML = `
-    <td>Gesamt</td>
-    <td class="num">${totalWorkdays}</td>
-    <td class="num">${totalFteDays.toFixed(1)}</td>
-    <td class="num">−${totalAbsenceDays.toFixed(1)}</td>
-    <td class="num">${totalFocusAvailable.toFixed(1)}</td>
-    <td class="num">${totalCapacitySp.toFixed(1)}</td>
-  `;
-
-  const sprints = state.sprintLength > 0 ? totalWorkdays / state.sprintLength : 0;
-  const auslastung = totalCapacitySp > 0 ? (state.plannedSp / totalCapacitySp) * 100 : 0;
-  const auslastungClass = auslastung > 100 ? 'over' : (auslastung > 85 ? 'warn' : '');
-
-  kpiGrid.innerHTML = `
-    <div class="stat">
-      <div class="stat-icon"><span class="material-symbols-outlined">today</span></div>
-      <div class="stat-label">Werktage im Zeitraum</div>
-      <div class="stat-value">${totalWorkdays}</div>
-      <div class="stat-sub">≈ ${sprints.toFixed(1)} Sprints à ${state.sprintLength} Tage</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon"><span class="material-symbols-outlined">person_check</span></div>
-      <div class="stat-label">Verfügbare Personentage</div>
-      <div class="stat-value">${totalAvailable.toFixed(1)}</div>
-      <div class="stat-sub">vor Meetings/Overhead</div>
-    </div>
-    <div class="stat featured">
-      <div class="stat-icon"><span class="material-symbols-outlined">bolt</span></div>
-      <div class="stat-label">Team Velocity (Story Points)</div>
-      <div class="stat-value">${totalCapacitySp.toFixed(1)}</div>
-      <div class="stat-sub">nach ${state.meetingShare.toFixed(0)}% Meeting-Abzug · ${state.ptPerSp.toFixed(1)} PT/SP</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon"><span class="material-symbols-outlined">speed</span></div>
-      <div class="stat-label">Auslastung</div>
-      <div class="stat-value">${auslastung.toFixed(0)} %</div>
-      <div class="progress"><div class="progress-bar ${auslastungClass}" style="width:${Math.min(auslastung,100)}%"></div></div>
-      <div class="stat-sub">${state.plannedSp} von ${totalCapacitySp.toFixed(1)} SP geplant</div>
-    </div>
-  `;
-  updateRoleFilterToggle();
-}
-
-function updateRoleFilterToggle() {
-  document.querySelectorAll('#role-filter-group .toggle-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.roleFilter === state.roleFilter);
-  });
-}
-function setRoleFilter(role) {
-  state.roleFilter = ['all', 'dev', 'qa'].includes(role) ? role : 'all';
-  save();
-  renderCalc();
+function importData(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported || typeof imported !== 'object' || !Array.isArray(imported.members)) {
+        showToast('Datei sieht nicht wie ein gültiger Export aus.'); return;
+      }
+      if (!confirm('Aktuelle Konfiguration wirklich überschreiben?')) return;
+      state = Object.assign(defaultState(), imported);
+      save();
+      syncSettingsInputs();
+      renderAdmin(); renderPlanning();
+      showToast('Import erfolgreich.');
+    } catch (err) {
+      showToast('Fehler beim Lesen: ' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 // ============================================================
 // Helpers
 // ============================================================
+function formatNum(n) {
+  const num = toNum(n) || 0;
+  return Number.isInteger(num) ? String(num) : num.toFixed(1);
+}
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
 }
-
-// ============================================================
-// Import/Export
-// ============================================================
-function exportData() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'kapazitaetsplaner.json';
-  a.click();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._tid);
+  showToast._tid = setTimeout(() => t.classList.remove('show'), 2500);
 }
-function importData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      // Import soll immer im aktuellen Team-Kontext passieren.
-      delete imported.teamId;
-      state = Object.assign(state, imported);
-      save(); applyState(); alert('Import erfolgreich.');
-    } catch(err) { alert('Fehler beim Import: ' + err.message); }
-  };
-  r.readAsText(file);
-}
-function resetAll() {
-  if (!confirm('Alle Daten wirklich löschen?')) return;
-  localStorage.removeItem(storageKey());
-  location.reload();
-}
-function loadDemo() {
-  const today = new Date();
-  const y = today.getFullYear();
-  state.members = [
-    { id: uid(), name: 'Anna Müller',    fte: 100, role: 'dev' },
-    { id: uid(), name: 'Ben Schneider',  fte: 80,  role: 'qa' },
-    { id: uid(), name: 'Carla Weiß',     fte: 100, role: 'dev' },
-    { id: uid(), name: 'David Schmidt',  fte: 50,  role: 'qa' },
-  ];
-  state.absences = [
-    { id: uid(), memberId: state.members[0].id, type: 'vacation', from: `${y}-05-04`, to: `${y}-05-15`, share: 1 },
-    { id: uid(), memberId: state.members[2].id, type: 'training', from: `${y}-05-18`, to: `${y}-05-19`, share: 0.5 },
-  ];
-  state.calcFrom = `${y}-05-01`;
-  state.calcTo = `${y}-05-31`;
-  state.sprintLength = 10;
-  state.plannedSp = 30;
-  state.meetingShare = 20;
-  state.ptPerSp = 1;
-  state.roleFilter = 'all';
-  save(); applyState();
-  document.querySelector('.tab[data-panel="calc"]').click();
-}
-
-function currentCalcSnapshot() {
-  const from = document.getElementById('calc-from').value;
-  const to = document.getElementById('calc-to').value;
-  if (!from || !to || from > to) return null;
-  const holSet = holidaysInRange(from, to, state.state);
-  const members = state.members.filter(m => {
-    const role = m.role || 'dev';
-    return state.roleFilter === 'all' ? true : role === state.roleFilter;
-  });
-  let totalCapacitySp = 0;
-  members.forEach(m => {
-    const fteFactor = (m.fte || 0) / 100;
-    const workdays = workdaysBetween(from, to, holSet);
-    const fteAdjusted = workdays * fteFactor;
-    let absenceDays = 0;
-    state.absences.filter(a => a.memberId === m.id).forEach(a => {
-      const from2 = a.from < from ? from : a.from;
-      const to2 = a.to > to ? to : a.to;
-      if (from2 > to2) return;
-      const share = a.share === 0.5 ? 0.5 : 1;
-      absenceDays += workdaysBetween(from2, to2, holSet) * share * fteFactor;
-    });
-    const available = Math.max(0, fteAdjusted - absenceDays);
-    const focus = available * (1 - state.meetingShare / 100);
-    totalCapacitySp += focus / state.ptPerSp;
-  });
-  const utilization = totalCapacitySp > 0 ? (state.plannedSp / totalCapacitySp) * 100 : 0;
-  return {
-    id: uid(),
-    at: new Date().toISOString(),
-    roleFilter: state.roleFilter,
-    from,
-    to,
-    capacitySp: Number(totalCapacitySp.toFixed(1)),
-    plannedSp: Number(state.plannedSp.toFixed(1)),
-    utilization: Number(utilization.toFixed(1)),
-  };
-}
-function saveSnapshot() {
-  const snap = currentCalcSnapshot();
-  if (!snap) { alert('Bitte zuerst einen gültigen Zeitraum setzen.'); return; }
-  state.history = [snap, ...(state.history || [])].slice(0, 30);
-  save();
-  renderHistory();
-}
-function clearHistory() {
-  if (!confirm('Historie wirklich leeren?')) return;
-  state.history = [];
-  save();
-  renderHistory();
-}
-function renderHistory() {
-  const body = document.getElementById('history-body');
-  const table = document.getElementById('history-table');
-  const empty = document.getElementById('history-empty');
-  body.innerHTML = '';
-  const entries = (state.history || []);
-  if (entries.length === 0) {
-    table.style.display = 'none';
-    empty.style.display = 'flex';
-    return;
-  }
-  table.style.display = '';
-  empty.style.display = 'none';
-  entries.forEach(h => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${new Date(h.at).toLocaleString('de-DE')}</td>
-      <td>${(h.roleFilter || 'all').toUpperCase()}</td>
-      <td>${fmtGerman(h.from)} - ${fmtGerman(h.to)}</td>
-      <td class="num">${Number(h.capacitySp).toFixed(1)}</td>
-      <td class="num">${Number(h.plannedSp).toFixed(1)}</td>
-      <td class="num">${Number(h.utilization).toFixed(1)} %</td>
-    `;
-    body.appendChild(tr);
-  });
-}
-
-// ============================================================
-// Init
-// ============================================================
-function applyState() {
-  const input = document.getElementById('team-id');
-  if (input) input.value = state.teamId || '';
-  if (!['all','dev','qa'].includes(state.roleFilter)) state.roleFilter = 'all';
-  if (!Array.isArray(state.history)) state.history = [];
-  document.getElementById('state').value = state.state;
-  document.getElementById('holiday-year').value = state.year;
-  document.getElementById('calc-from').value = state.calcFrom;
-  document.getElementById('calc-to').value = state.calcTo;
-  document.getElementById('sprint-length').value = state.sprintLength;
-  document.getElementById('planned-sp').value = state.plannedSp;
-  document.getElementById('meeting-share').value = state.meetingShare ?? 20;
-  document.getElementById('pt-per-sp').value = state.ptPerSp ?? 1;
-  updateRoleFilterToggle();
-  renderTeam();
-  renderAbsenceMembers();
-  renderAbsences();
-  renderHistory();
-  renderHolidays();
-  renderCalc();
-}
-
-document.getElementById('state').addEventListener('change', () => { state.state = document.getElementById('state').value; save(); renderHolidays(); renderCalc(); });
-document.getElementById('team-id').addEventListener('change', () => {
-  const input = document.getElementById('team-id');
-  const next = (input.value || '').trim();
-  if (!next) { input.value = state.teamId; alert('Bitte ein Team-Kürzel eingeben.'); return; }
-  state.teamId = next;
-  localStorage.setItem(STORAGE_TEAM_INSTANCE_KEY, next);
-  load();
-  applyState();
-});
-document.getElementById('holiday-year').addEventListener('change', () => { state.year = parseInt(document.getElementById('holiday-year').value); save(); renderHolidays(); });
-['calc-from','calc-to','sprint-length','planned-sp','meeting-share','pt-per-sp'].forEach(id => {
-  document.getElementById(id).addEventListener('change', renderCalc);
-  document.getElementById(id).addEventListener('input', renderCalc);
-});
-
-initTeamId();
-load();
-if (!state.year) state.year = new Date().getFullYear();
-applyState();
 </script>
 </body>
 </html>
